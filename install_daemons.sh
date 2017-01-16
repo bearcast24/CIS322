@@ -34,8 +34,10 @@ make install
 cd $install_prefix
 ##use curl to download Apache httpd-2.4.25
 
-curl http://www.gtlib.gatech.edu/pub/apache//httpd/httpd-2.4.25.tar.bz2 > httpd-2.4.25.tar.bz2
+#curl http://www.gtlib.gatech.edu/pub/apache//httpd/httpd-2.4.25.tar.bz2 > httpd-2.4.25.tar.bz2
+curl http://mirrors.koehn.com/apache//httpd/httpd-2.4.25.tar.bz2 > httpd-2.4.25.tar.bz2
 
+#un-compress files
 tar -xjf httpd-2.4.25.tar.bz2
 
 cd httpd-2.4.25
