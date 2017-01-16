@@ -30,6 +30,8 @@ make
 #install PostgreSQL
 make install
 
+# Move back to prefix
+cd $install_prefix
 ##use curl to download Apache httpd-2.4.25
 
 curl http://www.gtlib.gatech.edu/pub/apache//httpd/httpd-2.4.25.tar.bz2 > httpd-2.4.25.tar.bz2
