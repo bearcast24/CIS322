@@ -10,7 +10,6 @@
 #The script will be invoked with an argument giving the install prefix 
 #to be used when running the configure script for postgres and httpd.
 
-
 install_prefix=$1
 
 #clone the postgres source code from github
@@ -37,7 +36,7 @@ curl http://www.gtlib.gatech.edu/pub/apache//httpd/httpd-2.4.25.tar.bz2 > httpd-
 
 tar -xjf httpd-2.4.25.tar.bz2
 
-
+cd httpd-2.4.25
 
 #configure/make/install httpd
 ./configure --prefix=$install_prefix
