@@ -1,11 +1,4 @@
-#create_tables.sql
-#Kyile LeBlanc
-#CIS 322 #2
-
-#Use python to make tables from the project guidelines
-
-
-##Asset Tables
+--Asset Tables
 
 CREATE TABLE products (
 product_pk	integer primary key, 
@@ -71,7 +64,7 @@ unload_dt timestamp
 );
 
 
-##User Tables
+--User Tables
 
 CREATE TABLE users (
 user_pk integer primary key,
@@ -103,7 +96,7 @@ facility_fk integer REFERENCES facilities(facility_pk)
 
 
 
-##Security Tables
+--Security Tables
 
 CREATE TABLE levels (
 level_pk integer primary key,
@@ -127,7 +120,7 @@ product_fk integer  REFERENCES products(product_pk),
 asset_fk integer    REFERENCES assets(asset_pk)
 );
 
-##Security tags must have both level and compartment. Security tags must also have a user xor product xor asset.
+--Security tags must have both level and compartment. Security tags must also have a user xor product xor asset.
 
 
 
