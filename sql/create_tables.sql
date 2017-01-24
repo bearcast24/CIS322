@@ -8,8 +8,6 @@ alt_description text
 );
 
 
-
-
 CREATE TABLE assets (
 	asset_pk 	integer primary key, 
 	product_fk 	integer REFERENCES products(product_pk), 
@@ -20,7 +18,7 @@ CREATE TABLE assets (
 
 CREATE TABLE vehicles (
 vehicle_pk integer primary key,
-asset_fk integer REFERENCES assets(asset_pk),
+asset_fk integer REFERENCES assets(asset_pk)
 );
 
 CREATE TABLE facilities (
@@ -52,7 +50,7 @@ arrive_dt timestamp
 
 CREATE TABLE used_by (
 vehicle_fk integer REFERENCES vehicles(vehicle_pk),
-convoy_fk integer  REFERENCES vehicles(vehicle_pk),
+convoy_fk integer  REFERENCES vehicles(vehicle_pk)
 );
 
  
@@ -90,9 +88,6 @@ CREATE TABLE user_supports (
 user_fk integer     REFERENCES users(user_pk),
 facility_fk integer REFERENCES facilities(facility_pk)
 );
-
-
-
 
 
 
