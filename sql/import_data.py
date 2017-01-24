@@ -36,7 +36,7 @@ tempdict=(csv_dict("./osnap_legacy/HQ_inventory.csv"))
 #product_list.csv
 tempdict=(csv_dict("./osnap_legacy/product_list.csv"))
 #print(tempdict)
-cur.executemany("""INSERT INTO products(vendor,description) VALUES (%(vendor)s, %(description)s)""") tempdict)
+cur.executemany("""INSERT INTO products(vendor,description) VALUES (%(vendor)s, %(description)s)""", tempdict)
 
 #MB005_inventory.csv
 tempdict=(csv_dict("./osnap_legacy/MB005_inventory.csv"))
