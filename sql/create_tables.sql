@@ -19,7 +19,7 @@ alt_description text
 
 CREATE TABLE assets (
 	asset_pk 	integer primary key, 
-	product_fk 	integer, 
+	product_fk 	integer REFERENCES products(product_pk), 
 	asset_tag 	text, 
 	description text, 
 	alt_description text
@@ -27,7 +27,7 @@ CREATE TABLE assets (
 
 CREATE TABLE vehicles
 vehicle_pk integer primary key,
-asset_fk integer,
+asset_fk integer REFERENCES assets(asset_pk),
 );
 
 CREATE TABLE facilities (
@@ -39,18 +39,18 @@ location text
 
 
 CREATE TABLE asset_at (
-asset_fk integer,
-facility_fk integer,
+asset_fk integer REFERENCES assets(asset_pk) ,
+facility_fk integer REFERENCES facilities(facility_pk),
 arrive_dt timestamp,
 depart_dt timestamp
 );
 
 
-CREATE TABLE convoy (
+CREATE TABLE convoys (
 convoy_pk integer primary key,
 request text,
-source_fk integer,
-dest_fk integer,
+source_fk integer REFERENCES facilities(facility_pk),
+dest_fk integer REFERENCES facilities(facility_pk),
 depart_dt timestamp,
 arrive_dt timestamp
 );
@@ -58,14 +58,14 @@ arrive_dt timestamp
 
 
 CREATE TABLE used_by (
-vehicle_fk integer,
-convoy_fk integer,
+vehicle_fk integer REFERENCES vehicles(vehicle_pk),
+convoy_fk integer  REFERENCES vehicles(vehicle_pk),
 );
 
  
 CREATE TABLE asset_on (
-asset_fk integer,
-convoy_fk integer,
+asset_fk integer  REFERENCES facilities(facility_pk),
+convoy_fk integer REFERENCES convoys(convoy_pk),
 load_dt timestamp,
 unload_dt timestamp
 );
@@ -89,13 +89,13 @@ title text
 
 
 CREATE TABLE user_is (
-user_fk integer,
-role_fk integer
+user_fk integer REFERENCES users(user_pk),
+role_fk integer REFERENCES roles(role_pk)
 );
 
 CREATE TABLE user_supports (
-user_fk integer,
-facility_fk integer
+user_fk integer     REFERENCES users(user_pk),
+facility_fk integer REFERENCES facilities(facility_pk)
 );
 
 
@@ -120,11 +120,11 @@ comment text
  
 CREATE TABLE security_tags (
 tag_pk integer primary key,
-level_fk integer    not null,
-compartment_fk integer    not null,
-user_fk integer,
-product_fk integer,
-asset_fk integer
+level_fk integer    not null        REFERENCES levels(level_pk),
+compartment_fk integer    not null  REFERENCES compartments(compartment_pk),
+user_fk integer     REFERENCES users(user_pk),
+product_fk integer  REFERENCES products(product_pk),
+asset_fk integer    REFERENCES assets(asset_pk)
 );
 
 ##Security tags must have both level and compartment. Security tags must also have a user xor product xor asset.
