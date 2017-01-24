@@ -1,6 +1,9 @@
 --Kyile LeBlanc
 --CIS 322 HW2
 
+
+--Usage: psql -f create_tables.sql lost
+
 --Asset Tables
 
 CREATE TABLE products (
