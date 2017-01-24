@@ -1,3 +1,6 @@
+--Kyile LeBlanc
+--CIS 322 HW2
+
 --Asset Tables
 
 CREATE TABLE products (
