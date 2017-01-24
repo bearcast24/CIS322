@@ -14,7 +14,7 @@ database_port = $2
 
 #Get legacy data
 curl https://classes.cs.uoregon.edu//17W/cis322/files/osnap_legacy.tar.gz > osnap_legacy.tar.gz
-tar -xjf osnap_legacy.tar.gz
+tar -xzf osnap_legacy.tar.gz
 #cd osnap_legacy
 
 
