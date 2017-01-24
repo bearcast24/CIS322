@@ -18,7 +18,7 @@ CREATE TABLE assets (
 	alt_description text
 	);
 
-CREATE TABLE vehicles
+CREATE TABLE vehicles (
 vehicle_pk integer primary key,
 asset_fk integer REFERENCES assets(asset_pk),
 );
