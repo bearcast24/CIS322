@@ -1,11 +1,18 @@
 <html>
-	<body><h2>Login</h2>Welcome to the Lost</h2>
+	<body><h2>Login</h2>Welcome to Lost</h2>
 	<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>
 
+	<p>Please login using your OSNAP credentials</p>
 		<form action="{{url_for('goodbye')}}">
-			<input type="User ID" name="User_ID" />
-			<input type="Password" name="password" />
-			<input type="submit" name="submit" />
+			User name: <br>
+			<input type="text" name="User_ID" ><br>
+			Password:<br>
+			<input type="password" name="password" ><br><br>
+			<input type="submit" name="submit" value="Login"/>
 		</form>
 	</body>
 </html>
+
+
+
+<!--We're not actually going to authenticate a login yet. This screen will just accept whatever information the user gives.-->
