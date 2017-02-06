@@ -9,7 +9,7 @@ app = Flask(__name__)
 #Enter and Exit LOST
 @app.route('/', methods= ['GET', 'POST'])
 def login():
-	if request.method is 'GET': #Need to store login state??
+	if request.method == 'POST': #Need to store login state??
 		return redirect(url_for('Report_filter'))
 	else: #Ie not a good login
 		return render_template('Login.html')
