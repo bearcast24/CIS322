@@ -2,6 +2,17 @@
 	<body><h2>In Transit Report</h2>
 	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 
+
+<table>
+  {% for entry in session.processed_data_session_name %}
+  <tr>
+    <td>{{ entry.column_name1 }}</td>
+    <td>{{ entry.column_name2 }}</td>
+  </tr>
+  {% endfor %}
+</table>
 		
+
+
 	</body>
 </html>
