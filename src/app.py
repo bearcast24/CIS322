@@ -11,8 +11,8 @@ app = Flask(__name__)
 def login():
 	if request.method is 'POST': #Need to store login state??
 		return redirect(url_for('Report_filter'))
-	#else: #Ie not a good login
-	return render_template('Login.html')
+	else: #Ie not a good login
+		return render_template('Login.html')
 
 @app.route('/logout')
 def logout():
@@ -21,7 +21,7 @@ def logout():
 
 
 #Request report:
-@app.route('/report_filter', methods=['GET', 'POST'])
+@app.route('/Report_filter', methods=['GET', 'POST'])
 def Report_filter():
 	if request.method == 'POST':
 		session["filter_date"] = request.form["search_date"]
