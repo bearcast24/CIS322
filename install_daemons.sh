@@ -14,9 +14,9 @@ install_prefix=$1
 
 #clone the postgres source code from github
 
-git clone https://github.com/postgres/postgres.git REL9_5_STABLE
+git clone https://github.com/postgres/postgres.git -b REL9_5_STABLE --single-branch $HOME/postgres
 
-cd REL9_5_STABLE
+cd postgres
 
 #configure/make/install postgres 9.5.x
 ./configure --prefix=$install_prefix
