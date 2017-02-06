@@ -8,8 +8,8 @@ def index():
 
 @app.route('/welcome')
 def welcome():
-    return render_template('welcome.html')
+    return render_template('Login.html')
 
-@app.route('/goodbye')
+@app.route('/logout')
 def goodbye():
-    return render_template('goodbye.html')
+    return render_template('Logout.html')
