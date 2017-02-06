@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from config import dbname, dbhost, dbport
 
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ def welcome():
     return render_template('Login.html')
 
 @app.route('/logout')
-def goodbye():
+def logout():
     return render_template('Logout.html')
 
 
