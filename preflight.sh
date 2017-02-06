@@ -19,8 +19,10 @@ fi
 # Make Database
 cd sql
 psql -f create_tables.sql $1 
-psql -f import_data.sql $1 -p5432
+bash import_data.sh $1 -p 5432
+
+rm -r osnap_legacy.tar.gz
 cd ..
 
-# Install the wsgi files
-cp -R src/* $HOME/wsgi
+# Move source files to WSGI files
+cp -r src/* $HOME/wsgi
