@@ -1,4 +1,8 @@
+#! /usr/bin/bash
 
+#Kyile LeBlanc
+#W3 
+#CIS 322
 
 
 # Write a script named preflight.sh and commit the script at the top level of your repository (the same directory your install_daemons.sh script should be located). 
@@ -12,3 +16,25 @@
 
 
 bash ./preflight.sh lost
+
+
+
+
+
+#FROM CLASS REPO:
+if [ "$#" -ne 1 ]; then
+    echo "Usage: ./preflight.sh <dbname>"
+    exit;
+fi
+
+# Database prep
+cd sql
+psql $1 -f create_tables.sql
+curl -O https://classes.cs.uoregon.edu//17W/cis322/files/osnap_legacy.tar.gz
+tar -xzf osnap_legacy.tar.gz
+bash ./import_data.sh $1 5432
+rm -rf osnap_legacy osnap_legacy.tar.gz
+cd ..
+
+# Install the wsgi files
+cp -R src/* $HOME/wsgi
