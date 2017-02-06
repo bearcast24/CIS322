@@ -1,18 +1,23 @@
 <html>
-	<body><h2>In Transit Report</h2>
+	<body><title>Transit Report</title>
 	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 
-
-<table>
-  {% for entry in session.processed_data_session_name %}
-  <tr>
-    <td>{{ entry.column_name1 }}</td>
-    <td>{{ entry.column_name2 }}</td>
-  </tr>
-  {% endfor %}
-</table>
-		
-
+  <h2>Assets in Transit Report</h2>
+  <!-- table formating from W3, and Piazza -->
+    <table border="1">
+      <tr>
+         <th>Asset Tag</th> <th>Description</th> <th>Source Facility</th> <th>Destination Facility</th> <th>Loaded</th> <th>Unloaded</th>
+      </tr>
+      {% for entry in session.transit_report %}
+      <tr>
+         <td>{{entry.asset_tag}}</td> <td>{{entry.asset_description}}</td> <td>{{entry.source}}</td> <td>{{entry.destination}}</td> <td>{{entry.load_dt}}</td> <td>{{entry.unload_dt}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <br>
+    <a href="{{url_for('logout')}}"> Click here to logout </a> 
+    <br>
+    <a href="{{url_for('report_filter')}}"> Return to home</a> 
 
 	</body>
 </html>

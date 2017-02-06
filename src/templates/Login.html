@@ -1,10 +1,10 @@
 <html>
-	<body><h2>Welcome</h2>
-		<h3>Welcome to Lost</h3>
+	<body><title>Welcome</title>
+		<h1>Welcome to Lost</h1>
 	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 
 	<p>Please login using your OSNAP credentials</p>
-		<form action="{{url_for('report_filter')}}">
+		<form action="{{url_for('login')}}" method = post>
 			User name: <br>
 			<input type="text" name="User_ID" ><br>
 			Password:<br>

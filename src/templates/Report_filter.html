@@ -1,8 +1,8 @@
 <html>
-	<body><h2>Lost: Report Filter</h2>
+	<body><title>Report Filter</title>
 
 		<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
-		<form action="{{url_for('goodbye')}}">
+		<form action="{{url_for('report_filter')}}">
 			Facilities:
 			<input type="text" name="facilities" />
 			Date:
@@ -13,6 +13,10 @@
   			<input type="checkbox" name="date" value="Date">Date
  			<input type="checkbox" name="facilities" value="Facilities">Facilities
 		</form>
+
+
+
+		Logout: <a href="{{url_for('logout')}}">here</a> .
 
 
 	</body>
