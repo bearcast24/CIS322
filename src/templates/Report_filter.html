@@ -3,20 +3,25 @@
 
 		<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 		<form action="{{url_for('report_filter')}}">
+			
+			<h4>Report type:</h4>
+  			<input type="radio" name="filter" value="Transit">Transit
+ 			<input type="radio" name="filter" value="Facilities">Facilities
+ 			
+ 			<h4>Sort by:</h4>
 			Facilities:
 			<input type="text" name="facilities" />
+			<br>
 			Date:
 			<input type="date" name="date" />
-			<input type="submit" name="submit" />
+			<br>
+ 			<input type="submit" name="submit" />
 			<input type="reset"/>
-			<br>Sort by:
-  			<input type="checkbox" name="date" value="Date">Date
- 			<input type="checkbox" name="facilities" value="Facilities">Facilities
 		</form>
 
 
 
-		Logout: <a href="{{url_for('logout')}}">here</a> .
+		<a href="{{url_for('logout')}}">Logout</a>
 
 
 	</body>
