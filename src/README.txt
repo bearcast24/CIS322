@@ -1,11 +1,12 @@
-These files should be in a WSGI directory for Apache to serve.
+These files should be in a WSGI directory for Apache to serve:
 
 Run:
 app.py - python code that is run when the webserver starts
 
+Webserver settings:
+config.py - python code for webserver settings
 Edit for settings:
-config.py - python code that sets up the configuration for the webserver
-lost_config.json - config file that config.py accesses for its data
+lost_config.json - config file for config.py to parce for settings data
 
 
 
