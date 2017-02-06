@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('Login.html')
 
 @app.route('/welcome')
 def welcome():
@@ -13,3 +13,37 @@ def welcome():
 @app.route('/logout')
 def goodbye():
     return render_template('Logout.html')
+
+
+
+@app.route('/Report')
+def Report():
+    return render_template('Report_filter.html')
+
+
+
+@app.route('/In_transit')
+def Transit():
+    return render_template('In_Transit.html')
+
+@app.route('/Facility_inventory ')
+def Facility():
+    return render_template('Facility_inventory.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
