@@ -12,3 +12,10 @@ with cpath.open() as conf:
     dbname = c['database']['dbname']
     dbhost = c['database']['dbhost']
     dbport = c['database']['dbport']
+
+
+    #Key things -> not used in the scope of the project
+    lost_priv = c['crypto']['lost_priv']
+    lost_pub  = c['crypto']['lost_pub']
+    user_pub  = c['crypto']['user_pub']
+    prod_pub  = c['crypto']['prod_pub']
