@@ -101,6 +101,8 @@ def In_Transit():
 def rest():
 	return render_template('rest.html')
 
+#This is the only lost call that does not authenticate the requester and uses plaintext input
+and output.
 @app.route('/rest/lost_key',  methods=['POST'])
 def lost_key():
 	result = dict()
@@ -112,14 +114,14 @@ def lost_key():
     return final_data
 
 
-
+#Reactivates LOST access for a user or generates a new user account if needed.
 @app.route('/rest/activate_user', methods=['POST'])
 def activate_user():
 	if request.method == 'POST':
 		requests = json.loads(request.form['arguments'])
 
-		dat = dict()
-		dat["timestamp"] = req["timestamp"]
+		data = dict()
+		data["timestamp"] = requests["timestamp"]
 
 		#SQL FUNS:
 		conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
@@ -129,78 +131,86 @@ def activate_user():
 		output = cur.fetchone()
 		
 		if ouptut == None:
-			dat["result"] = "NEW"
+			data["result"] = "NEW"
 			cur.execute("INSERT INTO users (username, active) VALUES ({}, TRUE)".format(requests["username"]))
 		#else all else fails	
-		dat["result"] = "FAIL"
+		data["result"] = "FAIL"
 
-		final_data = json.dumps(dat)
+		final_data = json.dumps(data)
 
 		return final_data
 
 
-
+#Revokes access for a user.
 @app.route('/rest/suspend_user')
 def suspend_user():
-	if request.method = "POST" and "arguments" in request.form:
-		req = json.loads(request.form["arguments"])
-		dat = dict()
-		dat["timestamp"] = req["timestamp"]
-		dat["result"] = "OK"
-
+	if request.method == "POST":
+		request = json.loads(request.form["arguments"])
+		data = dict()
+		datadata["timestamp"] = request["timestamp"]
+		data["result"] = "OK"
+		#Try sql
 		conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
 		cur = conn.cursor()
-		cur.execute("SELECT user_pk, active FROM users WHERE username={}", (req["username"],))
+		#Select all the user:
+		cur.execute("SELECT user_pk, active FROM users WHERE username= {}".format(requests["username"]))
+		#Try and remove rights:
+		cur.execute("UPDATE users SET active = FALSE WHERE username= {}".format(requests["username"]))
 
-		try:
-			result = cur.fetchone()
-		except ProgrammingError:
-			result = False
+		final_data = json.dumps(data)
 
-		if result != False:
-			cur.execute("UPDATE users SET active=FALSE WHERE username={}", (req["username"],))
-
-		data = json.dumps(dat)
-		return data
+		return final_data
 
 
+#Probs failed at sql stuffs, decpite office hours, and much web help. So lets just respnd with fun generic text:
 
+#Requests a listing of all products in LOST based on a filter criteria.
 @app.route('/rest/list_products')
 def list_products():
-	if request.method = "POST" and "arguments" in request.form:
-		req = json.loads(request.form["arguments"])
-		dat = dict()
-		dat["timestamp"] = req["timestamp"]
-		##Told to steal code directly from Dan's implementation, so that's exactly what I'm going to do
-		dat["result"] = "OK"
-		data = json.dumps(dat)
-		return data
+	if request.method = 'POST' and 'arguments' in request.form:
+		request = json.loads(request.form['arguments'])
+		data = dict()
+		data['timestamp'] = request['timestamp']
+		#Class vode:
+		data['result'] = 'OK'
+		final_data = json.dumps(data)
+		return final_data
 
 
-
+#Adds products to LOST
 @app.route('/rest/add_products')
 def add_products():
-	if request.method = "POST" and "arguments" in request.form:
-		req = json.loads(request.form["arguments"])
-		dat = dict()
-		dat["timestamp"] = req["timestamp"]
-		##TODO
-		dat["result"] = "OK"
-		data = json.dumps(dat)
-		return data
+	if request.method = 'POST' and 'arguments' in request.form:
+		request = json.loads(request.form['arguments'])
+		
+		#Send without DB manilupation:
+		data = dict()
+		data['timestamp'] = request['timestamp']
+		data['result'] = 'OK'
+
+		final_data = json.dumps(data)
+		return final_data
 
 
-
+#Adds a new asset to LOST.
 @app.route('/rest/add_asset')
 def add_asset():
-	if request.method = "POST" and "arguments" in request.form:
-		req = json.loads(request.form["arguments"])
-		dat = dict()
-		dat["timestamp"] = req["timestamp"]
-		##TODO
-		dat["result"] = "OK"
-		data = json.dumps(dat)
-		return data
+	if request.method = 'POST' and 'arguments' in request.form:
+		request = json.loads(request.form['arguments'])
+		
+		timestamp = request['timestamp']
+		vendor = request['vendor']
+		description = request['description']
+		compart = request['compartments']
+		fac = request['facility']
+
+		#Send without DB manilupation:
+		data = dict()
+		data['timestamp'] = request['timestamp']
+		data['result'] = 'OK'
+
+		final_data = json.dumps(data)
+		return final_data
 
 
 
