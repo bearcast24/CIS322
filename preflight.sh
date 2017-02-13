@@ -16,13 +16,16 @@ if [ "$#" -ne 1 ]; then
     exit;
 fi
 
-# Make Database
+# Database prep
 cd sql
-psql -f create_tables.sql $1 
-bash import_data.sh $1 -p 5432
-
-rm -r osnap_legacy.tar.gz
+psql $1 -f create_tables.sql
+curl -O https://classes.cs.uoregon.edu//17W/cis322/files/osnap_legacy.tar.gz
+tar -xzf osnap_legacy.tar.gz
+bash ./import_data.sh $1 5432
+rm -rf osnap_legacy osnap_legacy.tar.gz
 cd ..
 
-# Move source files to WSGI files
-cp -r src/* $HOME/wsgi
+# Install the wsgi files
+cp -R src/* $HOME/wsgi
+# Need to install the crypo library as well
+cp util/osnap_crypto.py $HOME/wsgi
