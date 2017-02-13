@@ -167,7 +167,7 @@ def suspend_user():
 #Requests a listing of all products in LOST based on a filter criteria.
 @app.route('/rest/list_products')
 def list_products():
-	if request.method = 'POST' and 'arguments' in request.form:
+	if request.method == 'POST' and 'arguments' in request.form:
 		request = json.loads(request.form['arguments'])
 		data = dict()
 		data['timestamp'] = request['timestamp']
@@ -180,7 +180,7 @@ def list_products():
 #Adds products to LOST
 @app.route('/rest/add_products')
 def add_products():
-	if request.method = 'POST' and 'arguments' in request.form:
+	if request.method =='POST' and 'arguments' in request.form:
 		request = json.loads(request.form['arguments'])
 		
 		#Send without DB manilupation:
@@ -195,7 +195,7 @@ def add_products():
 #Adds a new asset to LOST.
 @app.route('/rest/add_asset')
 def add_asset():
-	if request.method = 'POST' and 'arguments' in request.form:
+	if request.method == 'POST' and 'arguments' in request.form:
 		request = json.loads(request.form['arguments'])
 		
 		timestamp = request['timestamp']
@@ -210,6 +210,7 @@ def add_asset():
 		data['result'] = 'OK'
 
 		final_data = json.dumps(data)
+		
 		return final_data
 
 
