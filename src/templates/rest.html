@@ -1,0 +1,149 @@
+<html>
+	<body><title>REST</title>
+		<h1>REST calls</h1>
+	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
+			<h2>lost_key</h2>
+					<p>This is the only lost call that does not authenticate the requester and uses plaintext input and output.</p>
+
+				<h3>Request:</h3>
+					<p>The request does not provide values for any of the arguments though the data and
+					signature fields must be present in the request.</p>
+				<h3>Response</h3>
+					<p>result 'OK' or 'FAIL'</p>
+					<p>key The LOST public key</p>
+				<h4>Example:</h4>
+					<p>{"timestamp": "2017-02-02 06:15:13",</p>
+					<p>"result": "OK",</p>
+					<p>"key": "bksaoudu......aoelchsauh"}</p>
+
+			<h2>activate_user</h2>
+					<p>Reactivates LOST access for a user or generates a new user account if needed.</p>
+				<h3>Request:</h3>
+					<p>username OSNAP username to activate</p>
+				<h4>Example:</h4>
+					
+					<p>{"timestamp": "2017-02-02 06:15:13",</p>
+					<p>"username": "carter"}</p>
+					
+				<h4>Response:</h4>
+					<p>result 'OK', 'NEW', or 'FAIL'</p>
+				<h4>Example:</h4>
+					
+					<p>{"timestamp": "2017-02-02 06:15:13",</p>
+					<p>"result": "OK"}</p>
+				
+
+			<h2>suspend_user</h2>
+					<p>Revokes access for a user. If the user does not exist or access has already been revoked,
+				this call has no effect.</p>
+
+				<h3>Request:</h3>
+					<p>username OSNAP username to revoke</p>
+				<h4>Example:</h4>
+			
+					<p>{"timestamp": "2017-02-02 06:15:13",</p>
+					<p>"username": "jackson"}</p>
+				
+				<h3>Response</h3>
+					<p>result 'OK'</p>
+				<h4>Example:</h4>
+					<p>{"timestamp": "2017-02-02 06:15:13",</p>
+					<p>"result": "OK"}</p>
+			
+
+			<h2>list_products</h2>
+				<p>Requests a listing of all products in LOST based on a filter criteria. Additional filters may
+				be provided and additional data may be returned. The requests of the minimum form
+				documented in the example must be accepted and the produced result must have at least
+				the structure and fields of example provided. Asset information may not be provided by
+				this call (e.g. no returning number of assets that are of product types).</p>
+			<h3>Request:</h3>
+				<p>vendor Case insensitive string to match against vendor name</p>
+				<p>description Case insensitive string to match against product description</p>
+				<p>compartments Security tags for the asset as a json array, all tags must be matched for
+				compartment and level.</p>
+			<h4>Example:</h4>
+				
+				<p>{"timestamp": "2017-02-02 06:15:13",</p>
+				<p>"vendor": "",</p>
+				<p>"description": "notepad",</p>
+				<p>"compartments": []}</p>
+				
+			<h3>Response</h3>
+				<p>listing a json list containing the product information entries</p>
+			<h4>Example:</h4>
+				
+				<p>{ "timestamp": "2017-02-02 06:15:13",</p>
+				<p>"listing": [</p>
+				<p>{</p>
+				<p>"vendor": "Dunder Mifflin",</p>
+				<p>"description": "LOST legal size notepad",</p>
+				<p>"compartments": []},</p>
+
+				<p>{"vendor": "big n large",</p>
+				<p>"description": "LOST legal size notepad"</p>
+				<p>"compartments": []} } }</p>
+				 
+			<h2>add_products</h2>
+				<p>Adds products to LOST. Requests should be atomic (all products are added or no products
+				are added) and attempting to add a duplicate product should cause the request
+				to fail. A product is duplicated if at the end of the call the database would have two
+				products with the same vendor and description.</p>
+				
+				<h3>Request:</h3>
+					<p>new products a json list describing the new products</p>
+				<h4>Example:</h4>
+					
+					<p>{ "timestamp": "2017-02-02 06:15:13",</p>
+					<p>"new_products": [</p>
+					<p>{</p>
+					<p>"vendor": "Dunder Mifflin",</p>
+					<p>"description": "LOST letter size notepad",</p>
+					<p>"alt_description": "Children's storybook"</p>
+					<p>"compartments": ["adm:s"]</p>
+					<p>},</p>
+					
+					<p>{ "vendor": "Stark Industries",</p>
+					<p>"description": "Micronized Arc Reactor",</p>
+					<p>"alt_description": "Baseball"</p>
+					<p>"compartments": ["nrg:ts","wpn:s"] }</p>
+					<p>}</p>
+
+				<h3>Response</h3>
+					<p>result 'OK', or 'FAIL'</p>
+				<h4>Example:</h4>
+					
+					<p>{ "timestamp": "2017-02-02 06:15:13",</p>
+					<p>"result": "OK" }</p>
+		
+				<h2>add asset</h2>
+						<p>Adds a new asset to LOST.</p>
+				<h3>Request:</h3>
+					<p>vendor: Vendor of the product</p>
+					<p>description: Description of the product</p>
+					<p>compartments: Additional compartments the asset should be classified under
+					facility Facility code the asset is initially housed at</p>
+				<h4>Example:</h4>
+					
+					<p>{ "timestamp": "2017-02-02 06:15:13",</p>
+					<p>"vendor": "Dunder Mifflin",</p>
+					<p>"description": "LOST letter size notepad",</p>
+					<p>"compartments": ["wpn:ts"],</p>
+					<p>"facility": "HQ" }</p>
+	
+				<h3>Response</h3>
+						<p>result 'OK', or 'FAIL'</p>
+				<h4>Example:</h4>
+			
+						<p>{ "timestamp": "2017-02-02 06:15:13",</p>
+						<p>"result": "OK" }</p>
+
+
+
+
+	</body>
+</html>
+
+
+
+<!--We're not actually going to authenticate a login yet. This screen will just accept whatever information the user gives.-->
