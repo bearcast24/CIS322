@@ -1,0 +1,5 @@
+transport request #,depart time,waypoint1 time,waypoint 2 time,waypoint 3 time,waypoint 4 time,arrive time,assigned vehicles
+MB5696,1/4/17 2:40,1/7/17 1:43,1/7/17 10:43,1/7/17 18:30,1/7/17 20:17,1/7/17 21:17,"Prometheus, C152"
+ST9776,1/8/17 9:00,1/8/17 10:04,1/8/17 14:32,1/8/17 15:24,,1/8/17 20:39,"T34, T35, H6, C214, C95, B50"
+GL2334,1/8/17 8:38,,,,,1/8/17 18:10,C17
+LA1213,1/10/17 2:00,,1/10/17 17:17,,,1/10/17 18:30,"B32, B14, B10, B2, C25, C1, C110, C113, H7, H1"
