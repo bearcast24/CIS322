@@ -142,7 +142,7 @@ def activate_user():
 
 
 #Revokes access for a user.
-@app.route('/rest/suspend_user')
+@app.route('/rest/suspend_user', methods=['POST'])
 def suspend_user():
 	if request.method == "POST":
 		request = json.loads(request.form["arguments"])
@@ -165,7 +165,7 @@ def suspend_user():
 #Probs failed at sql stuffs, decpite office hours, and much web help. So lets just respnd with fun generic text:
 
 #Requests a listing of all products in LOST based on a filter criteria.
-@app.route('/rest/list_products')
+@app.route('/rest/list_products', methods=['POST'])
 def list_products():
 	if request.method == 'POST' and 'arguments' in request.form:
 		request = json.loads(request.form['arguments'])
@@ -178,7 +178,7 @@ def list_products():
 
 
 #Adds products to LOST
-@app.route('/rest/add_products')
+@app.route('/rest/add_products', methods=['POST'])
 def add_products():
 	if request.method =='POST' and 'arguments' in request.form:
 		request = json.loads(request.form['arguments'])
@@ -193,7 +193,7 @@ def add_products():
 
 
 #Adds a new asset to LOST.
-@app.route('/rest/add_asset')
+@app.route('/rest/add_asset', methods=['POST'])
 def add_asset():
 	if request.method == 'POST' and 'arguments' in request.form:
 		request = json.loads(request.form['arguments'])
