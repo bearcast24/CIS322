@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import psycopg2
+import json
 #This should pull all configuations from the json file:
-from config import dbname, dbhost, dbport
+from config import dbname, dbhost, dbport, lost_priv, lost_pub, user_pub, prod_pub
 
 
 app = Flask(__name__)
@@ -93,6 +94,120 @@ def In_Transit():
 
 	session["In_Transit"] = transit_report
 	return render_template('In_Transit.html')
+
+#Rest stuffs:
+
+@app.route('/rest')
+def rest():
+	return render_template('rest.html')
+
+@app.route('/rest/lost_key',  methods=['POST'])
+def lost_key():
+	result = dict()
+    result['timestamp'] = datetime.datetime.utcnow().isoformat()
+    result['result'] = 'OK'
+    result[key] = 'random_key' #using test key instead of random gernation
+    final_data = json.dumps(result)
+    
+    return final_data
+
+
+
+@app.route('/rest/activate_user', methods=['POST'])
+def activate_user():
+	if request.method == 'POST':
+		requests = json.loads(request.form['arguments'])
+
+		dat = dict()
+		dat["timestamp"] = req["timestamp"]
+
+		#SQL FUNS:
+		conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+		cur = conn.cursor()
+		cur.execute("SELECT user_pk, active FROM users WHERE username={};".format(requests["username"]))
+		#Catch the output from the sql call  (W3 SQL help)
+		output = cur.fetchone()
+		
+		if ouptut == None:
+			dat["result"] = "NEW"
+			cur.execute("INSERT INTO users (username, active) VALUES ({}, TRUE)".format(requests["username"]))
+		#else all else fails	
+		dat["result"] = "FAIL"
+
+		final_data = json.dumps(dat)
+
+		return final_data
+
+
+
+@app.route('/rest/suspend_user')
+def suspend_user():
+	if request.method = "POST" and "arguments" in request.form:
+		req = json.loads(request.form["arguments"])
+		dat = dict()
+		dat["timestamp"] = req["timestamp"]
+		dat["result"] = "OK"
+
+		conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+		cur = conn.cursor()
+		cur.execute("SELECT user_pk, active FROM users WHERE username={}", (req["username"],))
+
+		try:
+			result = cur.fetchone()
+		except ProgrammingError:
+			result = False
+
+		if result != False:
+			cur.execute("UPDATE users SET active=FALSE WHERE username={}", (req["username"],))
+
+		data = json.dumps(dat)
+		return data
+
+
+
+@app.route('/rest/list_products')
+def list_products():
+	if request.method = "POST" and "arguments" in request.form:
+		req = json.loads(request.form["arguments"])
+		dat = dict()
+		dat["timestamp"] = req["timestamp"]
+		##Told to steal code directly from Dan's implementation, so that's exactly what I'm going to do
+		dat["result"] = "OK"
+		data = json.dumps(dat)
+		return data
+
+
+
+@app.route('/rest/add_products')
+def add_products():
+	if request.method = "POST" and "arguments" in request.form:
+		req = json.loads(request.form["arguments"])
+		dat = dict()
+		dat["timestamp"] = req["timestamp"]
+		##TODO
+		dat["result"] = "OK"
+		data = json.dumps(dat)
+		return data
+
+
+
+@app.route('/rest/add_asset')
+def add_asset():
+	if request.method = "POST" and "arguments" in request.form:
+		req = json.loads(request.form["arguments"])
+		dat = dict()
+		dat["timestamp"] = req["timestamp"]
+		##TODO
+		dat["result"] = "OK"
+		data = json.dumps(dat)
+		return data
+
+
+
+
+
+
+
 
 if __name__=='__main__':
     app.run(host='0.0.0.0', port=8080)
