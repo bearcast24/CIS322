@@ -15,7 +15,23 @@ def login():
 	if request.method == 'GET': #Need to store login state??
 		return redirect(url_for('login.html'))
 	elif request.method == 'POST':
-		return render_template('Login.html')
+		uname = request.form['username']		
+		pwd = request.form['password']
+		#Connect to postgres:
+		conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+        cur  = conn.cursor()
+
+        #Qurery:
+        cur.execute("SELECT username,password FROM user WHERE username = '{}' and password = '{}' ".format(uname, pwd))
+        #If user is found:
+        if cur.fetchone() is not None:
+        	session['username'] = uname
+            return render_template('dashboard.html')
+        #If no user is found:
+        return render_template('no_user.html')
+
+
+
 
 
 
