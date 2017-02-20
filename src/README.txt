@@ -13,7 +13,3 @@ lost_config.json - config file for config.py to parce for settings data
 
 Template pages:
 Login.html -  Login and welcome page
-Logout.html - Logout page
-Report_filter.html - Page to select and run query with options
-Facility_Inventory.html - Facility report page 
-In_Transit.html - Transit report page
