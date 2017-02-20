@@ -31,18 +31,35 @@ def login():
         return render_template('no_user.html')
 
 
-
-
-
-
-
-
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
     return render_template('dashboard.html')
 
 
 
+
+@app.route('/create_user', methods=['GET', 'POST'])
+def create_user():
+	if request.method == 'GET':
+		return render_template('create_user.html')
+	
+	elif request.method == 'POST':
+		uname = request.form['username']		
+		pwd = request.form['password']
+		session['username'] = uname
+		#Connect to postgres:
+		conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+        cur  = conn.cursor()
+        #qeruery:
+        cur.execute("SELECT username, password FROM user where username = '{}' AND password = '{}'".format(uname, pwd))
+        #logic:
+        #user is in user table:
+        if cur.fetchone() is not None:
+            return render_template('user_exists.html')
+        else: 
+        	cur.execute("INSERT INTO user(username,password) VALUES ('{}', '{}');"..format(uname, pwd))
+        	conn.commit()
+        	return render_template('user_added.html')
 
 
 if __name__=='__main__':
