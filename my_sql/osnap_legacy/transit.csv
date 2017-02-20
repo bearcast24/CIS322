@@ -1,8 +1,0 @@
-asset tag,src facility,dst facility,depart date,arrive date,transport request #,Comments
-"CA15467287, CA15467288, CA15467289, CA15467290",MB 005,Headquarters,1/4/17,1/7/17,MB5696,lunar rocks
-"CA15467291, CA15467292, CA15467293, CA15467294",Site 300,National City,1/8/17,1/8/17,ST9776,
-"CA15467295, CA15467296",Groom Lake,"Sparks, NV",1/8/17,1/8/17,GL2334,
-DC15467299,"Los Alamos, NM","Washington, D.C.",1/10/17,1/10/17,LA1213,Red Lion
-DC25467300,"Los Alamos, NM","Washington, D.C.",1/10/17,1/10/17,LA1213,Green Lion
-DC25467301,"Los Alamous, NM","Washington, D.C.",1/10/17,1/10/17,LA1213,Blue Lion
-DC25467302,"Las Alamos, NM","Washington, D.C.",1/10/17,1/10/17,LA1213,Yellow Lion
