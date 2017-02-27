@@ -189,6 +189,19 @@ def dispose_asset():
     if request.method == 'POST':
         ass_tag = request.form['asset_tag']
         cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE '{}';".format(ass_tag))
+        ret_assets = cur.fetchall()
+
+        #item not there:
+        if not ret_assets:
+            return render_template('error_removed.html')
+        #Remove item: (Need to add in way to see item alreeady removed)
+        else: 
+            cur.execute("UPDATE assets SET disposed = TRUE where asset_tag = '{}'".format(ass_tag))
+            conn.commit()
+            return render_template('dashboard.html')
+
+
+
 
 
 
