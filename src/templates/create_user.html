@@ -1,14 +1,16 @@
 <html>
-	<body><title>Welcome</title>
+	<body><title>Add Facility</title>
 		<h1>Welcome to Lost</h1>
 	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 
-	<p>Create a new user:</p>
-		<form action="{{url_for('login')}}" method = "POST">
+	<p>Create a new Facility:</p>
+		<form action="{{url_for('create_user')}}" method = "POST">
 			User name: <br>
 			<input type="text" name="username" ><br>
 			Role: <br>
-			<input type="text" name="role" ><br>
+			<input type="radio" name="role" value="Logistics Officer"> Logistics Officer 
+			<input type="radio" name="role" value="Facilities Officer"> Facilities Officer
+			<br>
 			Password:<br>
 			<input type="password" name="password" ><br><br>
 			<input type="submit" name="submit" value="submit"/>

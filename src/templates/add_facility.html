@@ -1,0 +1,29 @@
+<html>
+	<body><title>Add Facility</title>
+	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
+
+	<p>Create a new Facility:</p>
+		<form action="{{url_for('add_facility')}}" method = "POST">
+			Common name: <br>
+			<input type="text" name="common_name" ><br>
+			fcode: <br>
+			<input type="text" name="fcode" ><br>
+			Password:<br>
+			<input type="submit" name="submit" value="submit"/>
+		</form>
+		<h2>Facilities in database:</h2>
+		<table>
+			<tr>
+				<th> FACILITY </th>
+				<th> FCODE </th>
+			</tr>
+
+			{%for item in session.fac_results%}
+			<tr>
+				<td> {{item.common_name}} </td>
+				<td> {{item.fcode}} </td>
+			</tr>
+			{%endfor%}
+		</table>
+	</body>
+</html>
