@@ -1,0 +1,40 @@
+<html>
+	<body><title>Assest Report</title>
+	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
+
+	<p>Report:</p>
+		<form action="{{url_for('asset_report')}}" method = "POST">
+			location:<br>
+			<select name='common_name'>
+				<option value='DC'> DC </option>
+				<option value='HQ'> HQ </option>
+				<option value='MB005'> MB005 </option>
+				<option value='NC'> NC </option>
+				<option value='SPNV'> SPNV </option>
+			</select>
+			asset arrived: <br>
+			<input type="text" name="date" required><br>
+			<input type="submit" name="submit" value="submit"/>
+		</form>
+
+		<h2>Assets in database:</h2>
+		<table>
+			<tr>
+				<th> asset_tag </th>
+				<th> description </th>
+				<th> Common name </th>
+				<th> Arrive date </th>
+
+			</tr>
+
+			{%for item in session.asset_list%}
+			<tr>
+				<td> {{item.asset_tag}} </td>
+				<td> {{item.description}} </td>
+				<td> {{item.common_name}} </td>
+				<td> {{item.arrive_dt}} </td>
+			</tr>
+			{%endfor%}
+		</table>
+	</body>
+</html>

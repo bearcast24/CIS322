@@ -202,18 +202,32 @@ def dispose_asset():
 
 
 
+@app.route('/asset_report', methods=['GET', 'POST'])
+def asset_report():
+    if request.method == 'GET':
+        return render_template('asset_report.html')
+    if request.method =='POST':
+        time = request.form['date']
+        fac = request.format['common_name']
+    cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
+        JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
+        JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
+        WHERE arrive_dt = '{}'".format(time))
 
+    repo = cur.fetchall()
 
+    asset_results = []
+    for line in repo:
+        data = dict()
+        #line[0] = key
+        data['asset_tag'] = line[0]
+        data['description'] = line[1]
+        data['common_name'] = line[2]
+        data['arrive_dt'] = line[3]
+        asset_results.append(data)
+    session['asset_list'] = asset_results
 
-
-
-
-
-# # @app.route('/asset_report', methods=['GET', 'POST'])
-# # def asset_report():
-
-
-
+    return redirect(url_for('asset_report'))
 
 
 
