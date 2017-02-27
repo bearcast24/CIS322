@@ -62,12 +62,12 @@ def create_user():
         USER_here = cur.fetchall()
 
         #Is role in DB or need to be made?
-        cur.execute("SELECT role_pk from roles where role = '{}';".format(rol))
+        cur.execute("SELECT role_pk from roles where role_name = '{}';".format(rol))
         ROLE_here = cur.fetchall()
 
         if not ROLE_here:
-            cur.execute("INSERT INTO roles (role) VALUES ('{}') RETURNING role_pk".format(rol))
-            rol_key = cur.fetchone()[0]
+            cur.execute("INSERT INTO roles (role_name) VALUES ('{}') RETURNING role_pk".format(rol))
+            rol_key = cur.fetchone()[0] #grab the key for the new role
             conn.commit()
         else:
             rol_key = ROLE_here[0]
