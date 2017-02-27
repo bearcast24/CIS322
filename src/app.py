@@ -167,30 +167,28 @@ def add_asset():
         else:        
             return render_template('error_duplicate.html')
 
-        
-
-#Access might be broken: Something janky is happening:
-@app.route('/dispose_asset', methods=['GET', 'POST'])
-def dispose_asset():
-    #Connect to postgres:
-    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
-    cur  = conn.cursor()
-    #Check if user is permited:
-    cur.execute("SELECT role_name from user_accounts JOIN roles ON user_accounts.role_fk = roles.role_pk WHERE username = '{}';".format(session['username']))
-
-    job_role = cur.fetchone()[0]
-    if job_role != 'logistics officer':
-        return render_template('access_denied.html')
-
-    #Page fun:
-    if request.method == 'GET':
-        return render_template('dispose_asset.html')
-    #Req page:
-    if request.method == 'POST':
-        ass_tag = request.form['asset_tag']
-        cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE '{}';".format(ass_tag))
 
 
+# #Access might be broken: Something janky is happening:
+# @app.route('/dispose_asset', methods=['GET', 'POST'])
+# def dispose_asset():
+#     #Connect to postgres:
+#     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+#     cur  = conn.cursor()
+#     #Check if user is permited:
+#     cur.execute("SELECT role_name from user_accounts JOIN roles ON user_accounts.role_fk = roles.role_pk WHERE username = '{}';".format(session['username']))
+
+#     job_role = cur.fetchone()[0]
+#     if job_role != 'logistics officer':
+#         return render_template('access_denied.html')
+
+#     #Page fun:
+#     if request.method == 'GET':
+#         return render_template('dispose_asset.html')
+#     #Req page:
+#     if request.method == 'POST':
+#         ass_tag = request.form['asset_tag']
+#         cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE '{}';".format(ass_tag))
 
 
 
@@ -198,15 +196,8 @@ def dispose_asset():
 
 
 
-
-
-
-
-
-
-
-# @app.route('/asset_report', methods=['GET', 'POST'])
-# def asset_report():
+# # @app.route('/asset_report', methods=['GET', 'POST'])
+# # def asset_report():
 
 
 
