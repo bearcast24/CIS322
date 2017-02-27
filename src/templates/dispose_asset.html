@@ -1,0 +1,17 @@
+<html>
+	<body><title>Remove Assest</title>
+	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
+
+	<p>Remove assets:</p>
+		<form action="{{url_for('dispose_asset')}}" method = "POST">
+			asset tag: <br>
+			<input type="text" name="asset_tag" ><br>
+			
+			asset arrived: <br>
+			<input type="text" name="date" ><br>
+
+			<input type="submit" name="submit" value="submit"/>
+		</form>
+		
+	</body>
+</html>
