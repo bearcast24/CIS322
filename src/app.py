@@ -86,6 +86,9 @@ def create_user():
 
 @app.route('/add_facility', methods=['GET', 'POST'])
 def add_facility():
+    #Connect to postgres:
+    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+    cur  = conn.cursor()
     #make a dict of facity:
     cur.execute("SELECT * FROM facilities;")
     res = cur.fetchall()
@@ -119,6 +122,9 @@ def add_facility():
 
 @app.route('/add_asset', methods=['GET', 'POST'])
 def add_asset():
+    #Connect to postgres:
+    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+    cur  = conn.cursor()
     cur.execute("SELECT * FROM assets;")
     asset_ret = cur.fetchall()
     asset_results = []
@@ -159,14 +165,41 @@ def add_asset():
             return redirect(url_for('add_asset'))
         #Chance are it is a spelling or case issue:   
         else:        
-            return render_template('duplicate_error.html')
+            return render_template('error_duplicate.html')
+
+        
+
+#Access might be broken: Something janky is happening:
+@app.route('/dispose_asset', methods=['GET', 'POST'])
+def dispose_asset():
+    #Connect to postgres:
+    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+    cur  = conn.cursor()
+    #Check if user is permited:
+    cur.execute("SELECT role_name from user_accounts JOIN roles ON user_accounts.role_fk = roles.role_pk WHERE username = '{}';".format(session['username']))
+
+    job_role = cur.fetchone()[0]
+    if job_role != 'logistics officer':
+        return render_template('access_denied.html')
+
+    #Page fun:
+    if request.method == 'GET':
+        return render_template('dispose_asset.html')
+    #Req page:
+    if request.method == 'POST':
+        ass_tag = request.form['asset_tag']
+        cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE '{}';".format(ass_tag))
 
 
 
 
 
-# @app.route('/dispose_asset', methods=['GET', 'POST'])
-# def dispose_asset():
+
+
+
+
+
+
 
 
 
