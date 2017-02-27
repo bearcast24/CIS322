@@ -91,7 +91,7 @@ def add_facility():
     res = cur.fetchall()
     fac_results = []
     for line in res:
-        fac = {}
+        fac = dict()
         #line[0] = key
         fac['common_name'] = line[1]
         fac['fcode'] = line[2]
@@ -117,8 +117,49 @@ def add_facility():
             return render_template('error_duplicate.html')
 
 
-# @app.route('/add_asset', methods=['GET', 'POST'])
-# def add_asset():
+@app.route('/add_asset', methods=['GET', 'POST'])
+def add_asset():
+    cur.execute("SELECT * FROM assets;")
+    asset_ret = cur.fetchall()
+    asset_results = []
+    #should use list comp for clairty:
+    for line in asset_ret:
+        data = dict()
+        #line[0] = key
+        data['asset_tag'] = line[1]
+        data['description'] = line[2]
+        asset_results.append(data)
+    session['asset_list'] = asset_results
+
+    if request.method == 'GET':
+        return render_template('add_asset.html')
+
+    if request.method == 'POST':
+        asset_tag = request.form['asset_tag']
+        desc = request.form['description']
+        fac = request.form['common_name']
+        arrive_dt = request.form['date']
+
+        #DB check:
+        cur.execute("SELECT asset_tag from assets WHERE asset_tag = '{}'".format(asset_tag))
+        asset_there = cur.fetchone()[0]
+
+        if not asset_there:
+            cur.execute("INSERT INTO assets (asset_tag, description) VALUES ('{}', '{}') RETURNING asset_pk;".format(asset_tag, desc))
+            conn.commit()
+            asset_pk = cur.fetchone()[0]
+
+            #Find asset home:
+            cur.execute("SELECT facility_pk FROM facilities WHERE common_name='{}';".format(fac))
+            facility_pk = cur.fetchone()[0]
+
+            #Give asset the home it disserves:
+            cur.execute("INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt) VALUES ({}, {}, {});".format(asset_pk,facility_pk,arrive_dt)
+            conn.commit()
+            return redirect(url_for('add_asset'))
+        #Chance are it is a spelling or case issue:   
+        else:        
+            return render_template('duplicate_error.html')
 
 
 
