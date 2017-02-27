@@ -1,3 +1,9 @@
+CREATE TABLE roles (
+	role_pk	serial primary key,
+	role_name varchar(32) --could be long title
+);
+--Using a role table gives growth potenial, as well as merdging jobs as needed
+
 CREATE TABLE user_accounts (
 	user_pk serial primary key,
 	username varchar (16), --usernames no more than 16 chars
@@ -11,11 +17,7 @@ CREATE TABLE user_accounts (
 -- One table makes sense at this point. Each user has one user-ID and PW
 
 
-CREATE TABLE roles (
-	role_pk	serial primary key,
-	role_name varchar(32) --could be long title
-);
---Using a role table gives growth potenial, as well as merdging jobs as needed
+
 
 CREATE TABLE assets (
 	asset_pk serial primary key,
