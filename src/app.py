@@ -59,11 +59,11 @@ def create_user():
         #queries:
         #Is user in DB?
         cur.execute("SELECT username, password FROM user_accounts where username = '{}' AND password = '{}';".format(uname, pwd))
-        USER_here = cur.fetchone()
+        USER_here = cur.fetchall()
 
         #Is role in DB or need to be made?
         cur.execute("SELECT role_pk from roles where role = '{}';".format(rol))
-        ROLE_here = cur.fetchone()
+        ROLE_here = cur.fetchall()
 
         if not ROLE_here:
             cur.execute("INSERT INTO roles (role) VALUES ('{}') RETURNING role_pk".format(rol))
