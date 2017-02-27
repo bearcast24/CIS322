@@ -84,67 +84,55 @@ def create_user():
 
 #New pages:
 
-    @app.route('/add_facility', methods=['GET', 'POST'])
-    def add_facility():
-        #make a dict of facity:
-        cur.execute("SELECT * FROM facilities;")
-        res = cur.fetchall()
-        fac_results = []
-        for line in res:
-            fac = {}
-            #line[0] = key
-            fac['common_name'] = line[1]
-            fac['fcode'] = line[2]
-            fac_results.append(fac)
-        session['fac_results'] = fac_results
+@app.route('/add_facility', methods=['GET', 'POST'])
+def add_facility():
+    #make a dict of facity:
+    cur.execute("SELECT * FROM facilities;")
+    res = cur.fetchall()
+    fac_results = []
+    for line in res:
+        fac = {}
+        #line[0] = key
+        fac['common_name'] = line[1]
+        fac['fcode'] = line[2]
+        fac_results.append(fac)
+    session['fac_results'] = fac_results
 
-        #show pages
-        if request.method == 'GET':
-            return render_template('add_facility.html')
+    #show pages
+    if request.method == 'GET':
+        return render_template('add_facility.html')
 
-        if request.method == 'POST':
-            common_name = request.form['common_name']
-            code = request.form['fcode']
-            #chedk for fac before adding:
-            cur.execute("SELECT fcode, common_name from facilities WHERE fcode = '{}' AND common_name = '{}';".format(fcode, common_name))
-            res_fac = cur.fetchall()
-            #add new
-            if not res_fac: 
-                cur.execute("INSERT INTO facilities (common_name, fcode) VALUES ('{}','{}');".format(fcode, common_name))
-                conn.commit()
-                return redirect(url_for('add_facility'))
-            else: 
-                return render_template('error_duplicate.html')
-
-
+    if request.method == 'POST':
+        common_name = request.form['common_name']
+        code = request.form['fcode']
+        #chedk for fac before adding:
+        cur.execute("SELECT fcode, common_name from facilities WHERE fcode = '{}' AND common_name = '{}';".format(fcode, common_name))
+        res_fac = cur.fetchall()
+        #add new
+        if not res_fac: 
+            cur.execute("INSERT INTO facilities (common_name, fcode) VALUES ('{}','{}');".format(fcode, common_name))
+            conn.commit()
+            return redirect(url_for('add_facility'))
+        else: 
+            return render_template('error_duplicate.html')
 
 
-
-
+# @app.route('/add_asset', methods=['GET', 'POST'])
+# def add_asset():
 
 
 
 
 
-
-
-
-    # @app.route('/add_asset', methods=['GET', 'POST'])
-    # def add_asset():
-
-
-
-
-
-    # @app.route('/dispose_asset', methods=['GET', 'POST'])
-    # def dispose_asset():
+# @app.route('/dispose_asset', methods=['GET', 'POST'])
+# def dispose_asset():
 
 
 
 
 
-    # @app.route('/asset_report', methods=['GET', 'POST'])
-    # def asset_report():
+# @app.route('/asset_report', methods=['GET', 'POST'])
+# def asset_report():
 
 
 
