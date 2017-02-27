@@ -1,4 +1,4 @@
-CREATE TABLE user (
+CREATE TABLE user_accounts (
 		user_pk serial primary key,
 		username varchar (16), --usernames no more than 16 chars
 		password varchar (16)  --passwords no more than 16 chars

@@ -21,8 +21,8 @@ def login():
 		conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
 
-        #Qurery:
-        cur.execute("SELECT username,password FROM user WHERE username = '{}' and password = '{}' ".format(uname, pwd))
+        #queries:
+        cur.execute("SELECT username,password FROM user_accounts WHERE username = '{}' and password = '{}'".format(uname, pwd))
         #If user is found:
         if cur.fetchone() is not None:
         	session['username'] = uname
@@ -50,14 +50,14 @@ def create_user():
 		#Connect to postgres:
 		conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
-        #qeruery:
-        cur.execute("SELECT username, password FROM user where username = '{}' AND password = '{}'".format(uname, pwd))
+        #queries:
+        cur.execute("SELECT username, password FROM user_accounts where username = '{}' AND password = '{}'".format(uname, pwd))
         #logic:
         #user is in user table:
         if cur.fetchone() is not None:
             return render_template('user_exists.html')
         else: 
-        	cur.execute("INSERT INTO user(username,password) VALUES ('{}', '{}');"..format(uname, pwd))
+        	cur.execute("INSERT INTO user_accounts(username,password) VALUES ('{}', '{}');"..format(uname, pwd))
         	conn.commit()
         	return render_template('user_added.html')
 
