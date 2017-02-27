@@ -50,18 +50,36 @@ def create_user():
     elif request.method == 'POST':
         uname = request.form['username']        
         pwd = request.form['password']
+        rol = request.form['role']
+
         session['username'] = uname
         #Connect to postgres:
         conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
         #queries:
+        #Is user in DB?
         cur.execute("SELECT username, password FROM user_accounts where username = '{}' AND password = '{}';".format(uname, pwd))
+        USER_here = cur.fetchone()
+
+        #Is role in DB or need to be made?
+        cur.execute("SELECT role_pk from roles where role = '{}';".format(rol))
+        ROLE_here = cur.fetchone()
+
+        if not ROLE_here:
+            cur.execute("INSERT INTO roles (role) VALUES ('{}') RETURNING role_pk".format(rol))
+            rol_key = cur.fetchone()[0]
+            conn.commit()
+        else:
+            rol_key = ROLE_here[0]
+
+
+
         #logic:
         #user is in user table:
-        if cur.fetchone() is not None:
+        if USER_here is not None:
             return render_template('user_exists.html')
         else: 
-            cur.execute("INSERT INTO user_accounts(username,password) VALUES ('{}', '{}');".format(uname, pwd))
+            cur.execute("INSERT INTO user_accounts(username,password, role_fk) VALUES ('{}', '{}', '{}');".format(uname, pwd, rol_key))
             conn.commit()
             return render_template('user_added.html')
 
