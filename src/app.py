@@ -8,19 +8,21 @@ app = Flask(__name__)
 
 app.secret_key = 'secret_password'
 
+#Connect to postgres:
+conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+cur  = conn.cursor()
+
 #Enter and Exit LOST
 @app.route('/', methods= ['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'GET': #Need to store login state??
 		return redirect(url_for('login.html'))
+
 	elif request.method == 'POST':
 		uname = request.form['username']		
 		pwd = request.form['password']
-		#Connect to postgres:
-		conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
-        cur  = conn.cursor()
-
+		
         #queries:
         cur.execute("SELECT username,password FROM user_accounts WHERE username = '{}' and password = '{}'".format(uname, pwd))
         #If user is found:
@@ -29,6 +31,8 @@ def login():
             return render_template('dashboard.html')
         #If no user is found:
         return render_template('no_user.html')
+
+    return render_template('login.html')   
 
 
 @app.route('/dashboard', methods=['GET'])
