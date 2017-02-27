@@ -147,7 +147,7 @@ def add_asset():
         arrive_dt = request.form['date']
 
         #DB check:
-        cur.execute("SELECT asset_tag from assets WHERE asset_tag = '{}'".format(asset_tag))
+        cur.execute("SELECT asset_tag from assets WHERE asset_tag = '{}';".format(asset_tag))
         asset_there = cur.fetchone()[0]
 
         if not asset_there:
@@ -176,7 +176,8 @@ def dispose_asset():
     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
     cur  = conn.cursor()
     #Check if user is permited:
-    cur.execute("SELECT role_name from user_accounts JOIN roles ON user_accounts.role_fk = roles.role_pk WHERE username = '{}';".format(session['username']))
+    cur.execute("SELECT role_name from user_accounts \
+        JOIN roles ON user_accounts.role_fk = roles.role_pk WHERE username = '{}';".format(session['username']))
 
     job_role = cur.fetchone()[0]
     if job_role != 'logistics officer':
@@ -196,7 +197,7 @@ def dispose_asset():
             return render_template('error_removed.html')
         #Remove item: (Need to add in way to see item alreeady removed)
         else: 
-            cur.execute("UPDATE assets SET disposed = TRUE where asset_tag = '{}'".format(ass_tag))
+            cur.execute("UPDATE assets SET disposed = TRUE where asset_tag = '{}';".format(ass_tag))
             conn.commit()
             return render_template('dashboard.html')
 
@@ -212,7 +213,7 @@ def asset_report():
     cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
         JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
         JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
-        WHERE arrive_dt = '{}'".format(time))
+        WHERE arrive_dt = '{}';".format(time))
 
     repo = cur.fetchall()
 
