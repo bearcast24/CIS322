@@ -54,7 +54,7 @@ CREATE TABLE transfer_requests (
 	request_dt timestamp,
 	source_fk integer REFERENCES facilities (facility_pk),
 	dest_fk	integer REFERENCES facilities (facility_pk),
-	asset_fkinteger REFERENCES assets (asset_pk),
+	asset_fk integer REFERENCES assets (asset_pk),
 	approver_fk integer REFERENCES user_accounts (user_pk),
 	approval_dt timestamp
 );
