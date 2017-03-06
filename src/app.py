@@ -405,13 +405,13 @@ def transfer_req():
 
 
 
-@app.route('/approve_req', methods = ['GET', 'POST'])
-def approve_req():
-    if not session['logged_in']:
-            return redirect(url_for('login'))
+# @app.route('/approve_req', methods = ['GET', 'POST'])
+# def approve_req():
+#     if not session['logged_in']:
+#             return redirect(url_for('login'))
 
-    if session['role'] != 'Facilities Officer':
-        return render_template('access_denied.html')
+#     if session['role'] != 'Facilities Officer':
+#         return render_template('access_denied.html')
     
 
 
@@ -421,13 +421,13 @@ def approve_req():
 
 
 
-@app.route('/update_transit', methods=['GET', 'POST'])
-def update_transit():
-    if not session['logged_in']:
-        return redirect(url_for('login'))
+# @app.route('/update_transit', methods=['GET', 'POST'])
+# def update_transit():
+#     if not session['logged_in']:
+#         return redirect(url_for('login'))
 
-    if session['role'] != 'Logistics Officer':
-        return render_template('access_denied.html')
+#     if session['role'] != 'Logistics Officer':
+#         return render_template('access_denied.html')
     
 
 
