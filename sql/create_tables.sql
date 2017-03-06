@@ -17,13 +17,19 @@ CREATE TABLE user_accounts (
 -- One table makes sense at this point. Each user has one user-ID and PW
 
 
+INSERT INTO roles (role_name) VALUES ('Logistics Officer');
+
+INSERT INTO roles (role_name) VALUES ('Facilities Officer');
+
+--Make the two required roles now to save the blank or nonexsiting role problem
+
 
 
 CREATE TABLE assets (
 	asset_pk serial primary key,
 	asset_tag varchar(16), 
 	description text,
-	disposed boolean
+	disposed timestamp DEFAULT null
 );
 
 CREATE TABLE facilities (
@@ -42,11 +48,34 @@ CREATE TABLE asset_at (
 
 -- The assest locations are in asset_at and to facilities table by the asset_fk and facility_fk
 
+CREATE TABLE transfer_requests (
+	request_pk serial primary key,
+	requester_fk integer REFERENCES user_accounts (user_pk),
+	request_dt timestamp,
+	source_fk integer REFERENCES facilities (facility_pk),
+	dest_fk	integer REFERENCES facilities (facility_pk),
+	asset_fkinteger REFERENCES assets (asset_pk),
+	approver_fk integer REFERENCES user_accounts (user_pk),
+	approval_dt timestamp
+);
 
+-- A transfer minimally has:
+-- A requester, a logistics officer submitting the request.
+-- The date and time the transfer request was submitted.
+-- The source facility.
+-- The destination facility.
+-- The asset to be transfered.
+-- An approver, a facilities officer approving the transfer request.
+-- The date and time the transfer request was approved.
 
+--transfer_requests is a many to many table pulling in several of the core database records to track
 
--- Test Roles:
+CREATE TABLE in_transit (
+	asset_fk integer REFERENCES assets (asset_pk),
+	request_fk integer REFERENCES transfer_requests (request_pk),
+	load_dt timestamp,
+	unload_dt timestamp
+);
 
--- INSERT INTO roles (role_name) VALUES ('Logistics Officer');
-
--- INSERT INTO roles (role_name) VALUES ('Facilities Officer');
+ -- tracks which user set the load and unload times via the transfer_requests table
+ 
