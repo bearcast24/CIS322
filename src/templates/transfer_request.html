@@ -1,0 +1,30 @@
+<html>
+<title>LOST Transfer Request Screen</title>
+	<body>
+		<form action="{{url_for('transfer_req')}}" method=POST>
+			Select asset's you want to move to another location:
+			<select name='asset_tag'>
+				{% for entry in session.asset_list %}
+				<option value='{{entry.tag}}'>{{entry.tag}}</option>
+				{% endfor %}
+			</select>
+			<br>
+			The asset is at:
+			<select name='source_fcode'>
+				{% for entry in session.facility_list %}
+				<option value='{{entry.fcode}}'>{{entry.fcode}}</option>
+				{% endfor %}
+			</select>
+			<br>
+			Move the asset to:
+			<select name='dest_fcode'>
+				{% for entry in session.facility_list %}
+				<option value='{{entry.fcode}}'>{{entry.fcode}}</option>
+				{% endfor %}
+				</select>
+				<br>
+			<input type='submit' value='Submit Request'>
+	
+		</form>
+	</body>
+</html>
