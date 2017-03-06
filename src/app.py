@@ -34,7 +34,7 @@ def login():
             session['logged_in'] = True
             session['role'] = result[2]
             #send to Dashboard after getting signed in
-            return render_template('dashboard.html')
+            return redirect(url_for('dashboard.html')
         #If no user is found:
         return render_template('no_user.html')
 
@@ -43,9 +43,38 @@ def login():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-    return render_template('dashboard.html')
+    if not session['logged_in']:
+        #test for logged in session and redirect
+        return redirect(url_for('login'))
+    #Hard code for ease-> should use database to make avail forms
+    if session['role'] == "Logistics Officer":
+        pass
 
 
+
+
+
+
+
+
+
+
+    if session['role'] == "Facilities Officer":
+        pass
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    return render_template('dashboard.html');
 
 
 
