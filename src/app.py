@@ -375,7 +375,7 @@ def transfer_req():
         return render_template("sucessful_request.html")
 
 
-    if request.method == 'GET'::
+    if request.method == 'GET':
         asset_list = []
         facility_list = []
 
