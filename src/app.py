@@ -24,10 +24,16 @@ def login():
         conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
         #queries:
-        cur.execute("SELECT username,password FROM user_accounts WHERE username = '{}' and password = '{}';".format(uname, pwd))
+        cur.execute("SELECT username,password,role_name FROM user_accounts INNER JOIN roles ON role_pk = role_fk\
+            WHERE username = '{}' and password = '{}';".format(uname, pwd))
+
+        result = cur.fetchone()
         #If user is found:
-        if cur.fetchone() is not None:
+        if result is not None:
             session['username'] = uname
+            session['logged_in'] = True
+            session['role'] = result[2]
+            #send to Dashboard after getting signed in
             return render_template('dashboard.html')
         #If no user is found:
         return render_template('no_user.html')
@@ -38,6 +44,24 @@ def login():
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
     return render_template('dashboard.html')
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/logout')
+def logout():
+    session['logged_in'] = False #Terminate the session
+    #logout_user()
+    session.clear()
+    return redirect(url_for('login'))
+
 
 
 
