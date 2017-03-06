@@ -90,14 +90,6 @@ def dashboard():
     conn.close()
     return render_template('dashboard.html');
 
-
-
-
-
-
-
-
-
 @app.route('/logout')
 def logout():
     session['logged_in'] = False #Terminate the session
@@ -153,6 +145,8 @@ def create_user():
 
 @app.route('/add_facility', methods=['GET', 'POST'])
 def add_facility():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
     #Connect to postgres:
     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
     cur  = conn.cursor()
@@ -189,6 +183,8 @@ def add_facility():
 
 @app.route('/add_asset', methods=['GET', 'POST'])
 def add_asset():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
     #Connect to postgres:
     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
     cur  = conn.cursor()
@@ -239,6 +235,11 @@ def add_asset():
 # #Access might be broken: Something janky is happening:
 # @app.route('/dispose_asset', methods=['GET', 'POST'])
 def dispose_asset():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+
+    if session['role'] != 'Logistics Officer':
+        return render_template('access_denied.html')
     #Connect to postgres:
     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
     cur  = conn.cursor()
@@ -272,6 +273,10 @@ def dispose_asset():
 
 @app.route('/asset_report', methods=['GET', 'POST'])
 def asset_report():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+
+
     if request.method == 'GET':
         return render_template('asset_report.html')
     if request.method =='POST':
@@ -300,7 +305,56 @@ def asset_report():
 
 
 
+#8
 
+@app.route('/transfer_req', methods = ['GET', 'POST'])
+def transfer_req():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+    conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
+
+
+
+
+
+
+@app.route('/approve_req', methods = ['GET', 'POST'])
+def approve_req():
+    if not session['logged_in']:
+            return redirect(url_for('login'))
+
+    if session['role'] != 'Facilities Officer':
+        return render_template('access_denied.html')
+        conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
+
+
+
+
+
+
+@app.route('/update_transit', methods=['GET', 'POST'])
+def update_transit():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+
+    if session['role'] != 'Logistics Officer':
+        return render_template('access_denied.html')
+    conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
+
+
+
+
+#EC??
+@app.route('/transfer_report', methods = ['GET', 'POST'])
+def transfer_report():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+
+    conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
 
 
 
