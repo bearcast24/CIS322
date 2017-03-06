@@ -59,14 +59,14 @@ CREATE TABLE transfer_requests (
 	approval_dt timestamp
 );
 
--- A transfer minimally has:
--- A requester, a logistics officer submitting the request.
--- The date and time the transfer request was submitted.
--- The source facility.
--- The destination facility.
--- The asset to be transfered.
--- An approver, a facilities officer approving the transfer request.
--- The date and time the transfer request was approved.
+/*A transfer minimally has:
+A requester, a logistics officer submitting the request.
+The date and time the transfer request was submitted.
+The source facility.
+The destination facility.
+The asset to be transfered.
+An approver, a facilities officer approving the transfer request.
+The date and time the transfer request was approved.*/
 
 --transfer_requests is a many to many table pulling in several of the core database records to track
 
