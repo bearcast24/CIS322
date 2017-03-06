@@ -1,13 +1,60 @@
 <html>
-	<body><title>Dashboard</title>
+	<title>Dashboard</title>
+	<body>
 		<h1>Dashboard</h1>
 	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 
-	<p>Welcome {{session.username}} </p>
+		<h2>Welcome {{session.username}} you are a {{session.role}}</h2>
+
+		<a href="{{url_for('asset_report')}}">Asset report:</a> See a list of assets LOST by facility. 
+		<br>
+		<a href="{{url_for('transfer_report')}}">Transfer report:</a> Listing of assets in transit
+		<br>
+		<a href="{{url_for('add_asset')}}">Add asset:</a> Add an asset to LOST. 
+		<br>
+		<a href="{{url_for('add_facility')}}">Add facility:</a> Add a facility to LOST.
+		<br>
 		
+		{% if session.role == 'Logistics Officer' %}
+		<a href="{{url_for('dispose_asset')}}">Dispose an asset:</a> 
+		<br>
+		<a href="{{url_for('transfer_req')}}">Request to transfer an asset:</a>
+		<br>
+		{% endif %}
+
+
+
+
+		<h2>Things needing approval from you:</h2>
+			<table border = "1">
+
+				<tr>
+					{% if session.role == "Facilities Officer" %}
+					<th>Transit Request ID</th> <th>Requester</th> <th>Request Time</th>
+					{% else %}
+					<th>Request ID</th> <th>Load time</th> <th>Unload Time</th>
+					{% endif %}
+				</tr>
+
+				{% for item in session.tasks %}
+				<tr>
+					<td> {{item.val1}} </td>
+					<td> {{item.val2}} </td>
+					<td> {{item.val3}} </td>
+					<td> {% if session.role == 'Facilities Officer' %}
+						(Add button to validate)
+						{% else %}
+						(Add button to Update)
+						{% endif %} 
+					</td>
+
+				</tr>
+				{% endfor %}
+			</table>
+
+
+
+			<br>
+	Click <a href="{{url_for('logout')}}">here</a> to logout.
 	</body>
 </html>
-
-
-
-<!--We're not actually going to authenticate a login yet. This screen will just accept whatever information the user gives.-->
