@@ -11,7 +11,7 @@ cur = conn.cursor()
 def export_lost():
 
     #users.csv
-    SQL = "SELECT username, password, role, active FROM user_accounts JOIN roles ON role_fk = role_pk;"
+    SQL = "SELECT username, password, role_name, active FROM user_accounts JOIN roles ON role_fk = role_pk;"
     #trying using stock code to speed and clean up code:
     cur.execute(SQL)
     lost_return = cur.fetchall()
