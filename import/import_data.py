@@ -17,11 +17,11 @@ def import_users(users_file):
 
         for item in reader:
             #Check role
-            SQL = "SELECT role_pk FROM roles WHERE role_name = '{}';".format(line['role'])
+            SQL = "SELECT role_pk FROM roles WHERE role_name = '{}';".format(item['role'])
             cur.execute(SQL)
             res = cur.fetchall()
             if not res:
-                SQL = "INSERT INTO roles (role_name) VALUES ({}) RETURNING role_pk;".format(line['role'])
+                SQL = "INSERT INTO roles (role_name) VALUES ({}) RETURNING role_pk;".format(item['role'])
                 role_key = cur.fetchone()[0]
             role_key=res[0]
 
@@ -67,7 +67,7 @@ def import_transfers(transfers_file):
     with open(transfers_file, "r") as csvfile:
         reader = csv.DictReader(csvfile)
 
-        for item in reader:
+        for line in reader:
             #Get user keys for items in transit
             cur.execute("SELECT user_pk FROM user_accounts WHERE username = {}".format(line['request_by']))
             reqr = cur.fetchone()[0]
