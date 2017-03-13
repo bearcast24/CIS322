@@ -54,7 +54,7 @@ def export_lost():
 
     #transfers.csv
     SQL = "SELECT a.asset_tag, ur.username, trans.request_dt, usr.username, trans.approval_dt, fac.facility_fcode, fd.facility_fcode, t.load_dt, t.unload_dt \
-    FROM transfer_requests AS trans INNER JOIN users AS ur ON trans.requester_fk=ur.user_pk INNER JOIN in_transit AS t ON t.request_fk=trans.request_pk \
+    FROM transfer_requests AS trans INNER JOIN user_accounts AS ur ON trans.requester_fk=ur.user_pk INNER JOIN in_transit AS t ON t.request_fk=trans.request_pk \
     INNER JOIN user_accounts AS usr ON trans.approver_fk=usr.user_pk INNER JOIN assets AS a ON trans.asset_fk=a.asset_pk \
     INNER JOIN facilities AS fac ON trans.source_fk=fac.facility_pk  INNER JOIN facilities AS fd ON trans.dest_fk=fd.facility_pk;"
     
