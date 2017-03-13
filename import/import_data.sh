@@ -8,4 +8,4 @@ if [ "$#" -ne 2 ]; then
 fi
 
 #call python scipt
-python3 inward.py $1 $2
+python3 import_data.py $1 $2
