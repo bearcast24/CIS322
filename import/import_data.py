@@ -84,15 +84,13 @@ def import_transfers(transfers_file):
             cur.execute("SELECT asset_pk FROM assets WHERE asset_tag = {}".format(line['asset_tag']))
             asset_pk = cur.fetchone()[0]
             
-            #import data into requests table
-            SQL = "INSERT INTO requests (requestor, request_dt, src_fac, dest_fac, asset, approver, approval_dt) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            data = (reqr, line['request_dt'], src, dest, asset_pk, appr, line['approve_dt'])
-            cur.execute(SQL, data)
+            #Insert data into transfer requests table
+            SQL = "INSERT INTO transfer_requests (requestor_fk, request_dt, source_fk, dest_fk, asset_fk, approver_fk, approval_dt) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            cur.execute(SQL, (reqr, line['request_dt'], src, dest, asset_pk, appr, line['approve_dt']))
 
-            #import data into in_transit table
-            SQL = "INSERT INTO in_transit (asset, src_fac, dest_fac, load_dt, unload_dt) VALUES (%s, %s, %s, %s, %s)"
-            data = (asset_pk, src, dest, line['load_dt'], line['unload_dt'])
-            cur.execute(SQL, data)
+            #Insert data for in_transit table
+            SQL = "INSERT INTO in_transit (asset_fk, source_fk, dest_fk, load_dt, unload_dt) VALUES (%s, %s, %s, %s, %s)"
+            cur.execute(SQL, (asset_pk, src, dest, line['load_dt'], line['unload_dt']))
         conn.commit()
 
 
