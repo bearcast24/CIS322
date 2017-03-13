@@ -39,8 +39,7 @@ def export_lost():
 
 
     #assets.csv
-    SQL = "SELECT asset_tag, description, common_name, arrive_dt, depart_dt \
-    FROM assets JOIN asset_at ON asset_pk = asset_fk JOIN facilities ON facility_fk = facility_pk;")
+    SQL = "SELECT asset_tag, description, common_name, arrive_dt, depart_dt FROM assets JOIN asset_at ON asset_pk = asset_fk JOIN facilities ON facility_fk = facility_pk;"
 
     cur.execute(SQL)
     lost_return = cur.fetchall()
