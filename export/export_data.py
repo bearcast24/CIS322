@@ -15,7 +15,7 @@ def export_lost():
     #trying using stock code to speed and clean up code:
     cur.execute(SQL)
     lost_return = cur.fetchall()
-    with open("/users.csv", "w") as usr_csv:
+    with open("users.csv", "w") as usr_csv:
             head_row = ["username", "password", "role", "active"]
             writer = csv.DictWriter(usr_csv, fieldnames=head_row)
             writer.writeheader()
@@ -29,7 +29,7 @@ def export_lost():
     cur.execute(SQL)
     lost_return = cur.fetchall()
 
-    with open("/facilities.csv", "w") as facilities_csv:
+    with open("facilities.csv", "w") as facilities_csv:
             head_row = ["fcode", "common_name"]
             writer = csv.DictWriter(facilities_csv, fieldnames=head_row)
             writer.writeheader()
@@ -43,7 +43,7 @@ def export_lost():
 
     cur.execute(SQL)
     lost_return = cur.fetchall()
-    with open("/assets.csv", "w") as assets_csv:
+    with open("assets.csv", "w") as assets_csv:
             head_row = ["asset_tag", "description", "facility", "acquired", "disposed"]
             writer = csv.DictWriter(assets_csv, fieldnames=head_row)
             writer.writeheader()
@@ -60,7 +60,7 @@ def export_lost():
     
     cur.execute(SQL)
     lost_return = cur.fetchall()
-    with open("/transfers.csv", "w") as transfers_csv:
+    with open("transfers.csv", "w") as transfers_csv:
             head_row = ["asset_tag", "request_by", "request_dt", "approve_by", "approve_dt", "source", "destination", "load_dt", "unload_dt"]
             writer = csv.DictWriter(transfers_csv, fieldnames=head_row)
             writer.writeheader()
