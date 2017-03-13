@@ -26,7 +26,7 @@ def import_users(users_file):
             role_key=res[0]
 
             #Make user:
-            SQL = "INSERT INTO user_accounts (username, password, active, role_fk) VALUES( {%s, %s, %s, %s });"
+            SQL = "INSERT INTO user_accounts (username, password, active, role_fk) VALUES(%s, %s, %s, %s);"
             cur.execute(SQL, (item['username'], item['password'], item['active'], role_key))
             conn.commit() #Save after each user is added
 
