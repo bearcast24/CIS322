@@ -47,48 +47,49 @@ def dashboard():
     if not session['logged_in']:
         #test for logged in session and redirect
         return redirect(url_for('login'))
+    else:
+        conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+        cur  = conn.cursor()
+        tasks = []
+        #Hard code for ease-> should use database to make avail forms
 
-    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
-    cur  = conn.cursor()
-    tasks = []
-    #Hard code for ease-> should use database to make avail forms
+        #Facilities
+        if session['role'] == "Facilities Officer":
+            #listing of transfer requests needing approval.
+            cur.execute("SELECT request_pk, user_accounts.username, transfer_requests.request_dt FROM transfer_requests INNER JOIN \
+                    user_accounts ON transfer_requests.requester_fk = user_accounts.user_pk WHERE approval_dt IS NULL;") 
+                    #https://www.w3schools.com/sql/sql_join_inner.asp
+            todo_request = cur.fetchall()
 
-    #Logistics
-    if session['role'] == "Logistics Officer":
-        #listing of asset transits which need to have load or unload times set
-        cur.execute("SELECT request_fk, load_dt, unload_dt FROM in_transit WHERE load_dt IS NULL OR unload_dt IS NULL;")
-        todo_request = cur.fetchall()
+            for item in todo_request:
+                item_que = dict()
+                item_que["request_pk"] =item[0]
+                item_que["requester"] =item[1]
+                item_que["request_time"] =item[2]
+                tasks.append(item_que)
+            session['tasks'] = tasks
+        #Logistics
+        elif session['role'] == "Logistics Officer":
+            #listing of asset transits which need to have load or unload times set
+            cur.execute("SELECT request_fk, load_dt, unload_dt FROM in_transit WHERE load_dt IS NULL OR unload_dt IS NULL;")
+            todo_request = cur.fetchall()
 
-        for item in todo_request:
-            item_que = dict()
-            item_que["request_fk"] =item[0]
-            item_que["load_dt"] =item[1]
-            item_que["unload_dt"] =item[2]
-            tasks.append(item_que)
-        #Send to Flask
-        session['tasks'] = tasks
+            for item in todo_request:
+                item_que = dict()
+                item_que["request_fk"] =item[0]
+                item_que["load_dt"] =item[1]
+                item_que["unload_dt"] =item[2]
+                tasks.append(item_que)
+            #Send to Flask
+            session['tasks'] = tasks
 
-    #Facilities
-    if session['role'] == "Facilities Officer":
-        #listing of transfer requests needing approval.
-        cur.execute("SELECT request_pk, user_accounts.username, transfer_requests.request_dt FROM transfer_requests INNER JOIN \
-                user_accounts ON transfer_requests.requester_fk = user_accounts.user_pk WHERE approval_dt IS NULL;") 
-                #https://www.w3schools.com/sql/sql_join_inner.asp
-        todo_request = cur.fetchall()
-
-        for item in todo_request:
-            item_que = dict()
-            item_que["request_pk"] =item[0]
-            item_que["requester"] =item[1]
-            item_que["request_time"] =item[2]
-            tasks.append(item_que)
-        session['tasks'] = tasks
-
-    #Save asset changes
-    conn.commit()
-    cur.close()
-    conn.close()
+        #Save asset changes
+        conn.commit()
+        # cur.close()
+        # conn.close()
     return render_template('dashboard.html');
+
+
 
 @app.route('/logout')
 def logout():
