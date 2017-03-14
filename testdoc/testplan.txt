@@ -1,9 +1,0 @@
-Minimally your test plan should cover:
-
-Creating the initial users
-Login to the system
-Add two facilities
-Add two assets
-Complete the asset transit process
-Dispose of an asset
-Run each of the reports
