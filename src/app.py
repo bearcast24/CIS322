@@ -34,7 +34,7 @@ def login():
             session['logged_in'] = True
             session['role'] = result[2]
             #send to Dashboard after getting signed in
-            return redirect(url_for('dashboard.html'))
+            return redirect(url_for('dashboard'))
         #If no user is found:
         return render_template('no_user.html')
 
