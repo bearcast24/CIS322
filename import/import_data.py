@@ -17,11 +17,13 @@ def import_users(users_file):
 
         for item in reader:
             #Check role
-            SQL = "SELECT role_pk FROM roles WHERE role_name = '{}';".format(item['role'])
-            cur.execute(SQL)
+            SQL = "SELECT role_pk FROM roles WHERE role_name = %s;"
+            cur.execute(SQL,(item['role'],) )
             res = cur.fetchall()
+
             if not res:
-                SQL = "INSERT INTO roles (role_name) VALUES ({}) RETURNING role_pk;".format(item['role'])
+                SQL = "INSERT INTO roles (role_name) VALUES (%s) RETURNING role_pk;"
+                cur.execute(SQL,(item['role'],) )
                 role_key = cur.fetchone()[0]
             role_key=res[0]
 
@@ -53,13 +55,13 @@ def import_assets(assets_file):
             cur.execute(SQL, (item['asset_tag'], item['description']))
             asset_pk = cur.fetchone()[0]
             
-            cur.execute("SELECT facility_pk FROM facilities WHERE fcode={};".format(item['facility']))
+            SQL2 = "SELECT facility_pk FROM facilities WHERE fcode= %s;"
+            cur.execute(SQL2, (item['facility'],))
             facility_pk = cur.fetchone()[0]
 
-            SQL = "INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt, dispose_dt) VALUES (%s, %s, %s, %s);"
-            cur.execute(SQL, (asset_pk, facility_pk, item['acquired'], item['disposed']))
+            SQL3 = "INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt, dispose_dt) VALUES (%s, %s, %s, %s);"
+            cur.execute(SQL3, (asset_pk, facility_pk, item['acquired'], item['disposed']))
             
-
             conn.commit() #One save per item
 
 
@@ -92,7 +94,7 @@ def import_transfers(transfers_file):
             #Insert data for in_transit table
             SQL = "INSERT INTO in_transit (asset_fk, source_fk, dest_fk, load_dt, unload_dt) VALUES (%s, %s, %s, %s, %s)"
             cur.execute(SQL, (asset_pk, src, dest, line['load_dt'], line['unload_dt']))
-        conn.commit()
+            conn.commit()
 
 
 if __name__ == "__main__":
