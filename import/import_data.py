@@ -59,8 +59,12 @@ def import_assets(assets_file):
             cur.execute(SQL2, (item['facility'],))
             facility_pk = cur.fetchone()[0]
 
-            SQL3 = "INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt, dispose_dt) VALUES (%s, %s, %s, %s);"
-            cur.execute(SQL3, (asset_pk, facility_pk, item['acquired'], item['disposed']))
+
+            SQL3 = "INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt, dispose_dt)  VALUES (%s, %s, %s, %s);"
+            if item['disposed'] == 'NULL':
+                cur.execute(SQL3, (asset_pk, facility_pk, item['acquired'], None))
+            else:
+                cur.execute(SQL3, (asset_pk, facility_pk, item['acquired'], item['disposed']))
             
             conn.commit() #One save per item
 
