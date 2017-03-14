@@ -92,7 +92,7 @@ def import_transfers(transfers_file):
             asset_pk = cur.fetchone()[0]
             
             #Insert data into transfer requests table
-            SQL = "INSERT INTO transfer_requests (requestor_fk, request_dt, source_fk, dest_fk, asset_fk, approver_fk, approval_dt) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            SQL = "INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk, approver_fk, approval_dt) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             cur.execute(SQL, (reqr, line['request_dt'], src, dest, asset_pk, appr, line['approve_dt']))
 
             #Insert data for in_transit table
