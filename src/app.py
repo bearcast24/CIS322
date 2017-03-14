@@ -333,14 +333,14 @@ def transfer_req():
         return render_template('tag_missing.html')
 
 
-        cur.execute("SELECT facility_pk FROM facilities WHERE facility_fcode={};".format(source))
+        cur.execute("SELECT facility_pk FROM facilities WHERE fcode={};".format(source))
         repo = cur.fetchone()
         if not repo:
             source_fk = repo[0]
         return render_template("bland_error.html")
 
 
-        cur.execute("SELECT facility_pk FROM facilities WHERE facility_fcode={};".format(dest))
+        cur.execute("SELECT facility_pk FROM facilities WHERE fcode={};".format(dest))
         repo = cur.fetchone()
         if not repo:
             dest_fk = repo[0]
@@ -356,7 +356,7 @@ def transfer_req():
 
 
 
-        cur.execute("SELECT f.facility_fcode FROM assets AS a INNER JOIN asset_at AS aa ON a.asset_pk=aa.asset_fk INNER JOIN \
+        cur.execute("SELECT f.fcode FROM assets AS a INNER JOIN asset_at AS aa ON a.asset_pk=aa.asset_fk INNER JOIN \
             facilities AS f ON f.facility_pk=aa.facility_fk WHERE aa.arrive_dt<={} AND (aa.depart_dt>{} OR aa.depart_dt IS NULL) AND a.asset_tag=%s;".format(request_dt, request_dt))
         repo = cur.fetchone()
         if not repo:
@@ -389,7 +389,7 @@ def transfer_req():
             asset_list.append(row)
         session['asset_list'] = asset_list
 
-        cur.execute('SELECT facility_fcode FROM facilities;')
+        cur.execute('SELECT fcode FROM facilities;')
         return_result = cur.fetchall()
     
         for items in return_result:
