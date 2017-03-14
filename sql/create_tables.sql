@@ -44,6 +44,7 @@ CREATE TABLE asset_at (
 	asset_fk integer REFERENCES assets(asset_pk),
 	facility_fk integer REFERENCES facilities(facility_pk),
 	arrive_dt timestamp,
+	dispose_dt timestamp DEFAULT NULL,
 	depart_dt timestamp DEFAULT NULL --Better to mark it NULL, just incase an import goes crazy
 );
 
