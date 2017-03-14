@@ -76,19 +76,19 @@ def import_transfers(transfers_file):
 
         for line in reader:
             #Get user keys for items in transit
-            cur.execute("SELECT user_pk FROM user_accounts WHERE username = {}".format(line['request_by']))
+            cur.execute("SELECT user_pk FROM user_accounts WHERE username = %s", (line['request_by'],))
             reqr = cur.fetchone()[0]
-            cur.execute("SELECT user_pk FROM user_accounts WHERE username = {}".format(line['approve_by']))
+            cur.execute("SELECT user_pk FROM user_accounts WHERE username = %s", (line['approve_by'],))
             appr = cur.fetchone()[0]
             
             #Facility key identifier for source and destination
-            cur.execute("SELECT facility_pk FROM facilities WHERE fcode = {}".format(line['source']))
+            cur.execute("SELECT facility_pk FROM facilities WHERE fcode = %s",(line['source'],))
             src = cur.fetchone()[0]
-            cur.execute("SELECT facility_pk FROM facilities WHERE fcode = {}".format(line['destination']))
+            cur.execute("SELECT facility_pk FROM facilities WHERE fcode = %s",(line['destination'],))
             dest = cur.fetchone()[0]
 
             #Asset key:
-            cur.execute("SELECT asset_pk FROM assets WHERE asset_tag = {}".format(line['asset_tag']))
+            cur.execute("SELECT asset_pk FROM assets WHERE asset_tag = %s",(line['asset_tag'],))
             asset_pk = cur.fetchone()[0]
             
             #Insert data into transfer requests table
