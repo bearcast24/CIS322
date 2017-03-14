@@ -38,7 +38,7 @@ def import_facilities(facilities_file):
         reader = csv.DictReader(csvfile)
 
         for item in reader:
-            SQL = "INSERT INTO facilities (fcode, common_name) VALUES({},{});"
+            SQL = "INSERT INTO facilities (fcode, common_name) VALUES(%s,%s);"
             cur.execute(SQL, (item['fcode'], item['common_name']))
             conn.commit()
 
