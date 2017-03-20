@@ -31,7 +31,7 @@ def main():
     #print("sending:\n%s"%data)
     
     # Make the resquest
-    my_route = sys.argv[1]+ "active_user" #From out account -> Use create_user
+    my_route = sys.argv[1]+ "activate_user" #From out account -> Use create_user
     req = Request(my_route, data.encode('ascii'),method='POST')
 
 
