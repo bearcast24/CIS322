@@ -1,0 +1,16 @@
+1. Creating the initial users - PASS
+   No problems and the database was updated correctly
+2. Test Dashboard - FAIL
+   Got an Internal Server Error when trying to access the dashboard
+3. Adding Facilities (2 facilities) - FAIL
+   Was able to access the page, but got an Internal Server Error when trying to add a facility. Facility was not added to the database.
+4. Adding assets (2 assets) - FAIL
+   Was able to access the page, but got an Internal Server Error when trying to add an asset (there were a list of facilities already able to be selected, but not in the database). Asset was not added to database and asset_at table was not updated either.
+5. Complete asset transit process - FAIL
+   Was able to access the page, but couldn't do anything without the existence of any facilities or assets.
+6. Dispose Asset - FAIL
+   Page inaccessible due to the fact the @app.route line in the app.py script is commented out.
+7. Asset Report - FAIL
+   Was able to access the page, but report couldn't be made since there were no assets.
+
+Although the users could be created and you can log in, dashboard doesn't work and the other pages load, but don't work.
