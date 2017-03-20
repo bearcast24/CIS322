@@ -31,8 +31,8 @@ def main():
     #print("sending:\n%s"%data)
     
     # Make the resquest
-    my_route = "active_user" #From out account -> Use create_user
-    req = Request(sys.argv[1]+ my_route, data.encode('ascii'),method='POST')
+    my_route = sys.argv[1]+ "active_user" #From out account -> Use create_user
+    req = Request(my_route, data.encode('ascii'),method='POST')
 
 
     #See if way to change the user password:
