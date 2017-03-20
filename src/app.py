@@ -143,42 +143,57 @@ def create_user():
             return render_template('user_added.html')
 
 
-@app.route('/activate_user', methods = ['POST'])
-    def activate_user():
-        #Connect to postgres:
-        conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
-        cur = conn.cursor()
+@app.route('/activate_user', methods = ['POST']) #only post requests
+def activate_user():
+    #Connect to postgres:
+    conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
 
-        uname = request.form['username']        
-        pwd = request.form['password']
-        rol = request.form['role']
-        SQL = "SELECT username, password, role_fk, active FROM user_accounts WHERE username = %s"
-        cur.execute(SQL, (uname,))
-        user_return = cur.fetchall()
+    uname = request.form['username']        
+    pwd = request.form['password']
+    rol = request.form['role']
+    SQL = "SELECT username, password, role_fk, active FROM user_accounts WHERE username = %s"
+    cur.execute(SQL, (uname,))
+    user_return = cur.fetchall()
 
-        ##Make or update user:
-        #Make new user:
-        if user_return == None:
-            #find roles
-            SQL = "SELECT role_pk from roles WHERE role_name = %s"
-            cur.execute(SQL,(rol,))
-            role_key = cur.fetchone()[0]
+    ##Make or update user:
+    #Make new user:
+    if user_return == None:
+        #find roles
+        SQL = "SELECT role_pk from roles WHERE role_name = %s"
+        cur.execute(SQL,(rol,))
+        role_key = cur.fetchone()[0]
 
-            #add to user db
-            SQL = "INSERT INTO user_accounts (username, password, role_fk, active) VALUES (%s, %s, %s, %s)"
-            cur.execute(SQL, (uname, pwd, role_key, True ))
-            conn.commit() # Save the new entrey
+        #add to user db
+        SQL = "INSERT INTO user_accounts (username, password, role_fk, active) VALUES (%s, %s, %s, %s)"
+        cur.execute(SQL, (uname, pwd, role_key, True ))
+        conn.commit() # Save the new entry
 
-            #Pass back feedback:
-            return "The user {} was successfully added to the database and activated as a {}".format(uname, rol)
+        #Pass back feedback:
+        return "The user {} was successfully added to the database and activated as a {}".format(uname, rol)
 
-        #Update user:
-        else: 
-            #The user was found and wants a new password
-            cur.execute('UPDATE user_accounts SET password=%s, active=%s WHERE username=%s;', (pwd, True, uname))
-            conn.commit() # Save
-            #Return message of change:
-            return "The {} user {} was updated in the database and activated".format(rol, uname)
+    #Update user:
+    else: 
+        #The user was found and wants a new password
+        cur.execute('UPDATE user_accounts SET password=%s, active=%s WHERE username=%s;', (pwd, True, uname))
+        conn.commit() # Save
+        #Return message of change:
+        return "The {} user {} was updated in the database and activated".format(rol, uname)
+
+
+@app.route('/revoke_user', methods = ['POST']) #only post requests
+def revoke_user():
+    conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
+    #No need to test is user is real as it is only deactivating accounts, if it did respond that a user was not found
+    #it could be a security issue
+    uname = request.form['username']
+    cur.execute('UPDATE user_accounts SET active=%s WHERE username=%s;', (False, uname))
+    conn.commit() #Save the update, event if nothing exists
+    return 'User {} has been updated'.format(uname)
+
+
+
 
 
 
