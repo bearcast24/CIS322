@@ -369,7 +369,6 @@ def asset_report():
 
 
 #8
-@app.route('/transfer_report', methods = ['GET', 'POST'])
 @app.route('/transfer_req', methods = ['GET', 'POST'])
 def transfer_req():
     if not session['logged_in']:

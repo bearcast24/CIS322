@@ -8,8 +8,6 @@
 
 		<a href="{{url_for('asset_report')}}">Asset report:</a> See a list of assets LOST by facility. 
 		<br>
-		<!-- <a href="{{url_for('transfer_report')}}">Transfer report:</a> Listing of assets in transit -->
-		<br>
 		<a href="{{url_for('add_asset')}}">Add asset:</a> Add an asset to LOST. 
 		<br>
 		<a href="{{url_for('add_facility')}}">Add facility:</a> Add a facility to LOST.
@@ -18,7 +16,6 @@
 		{% if session.role == 'Logistics Officer' %}
 		<a href="{{url_for('dispose_asset')}}">Dispose an asset:</a> 
 		<br>
-		<!-- <a href="{{url_for('transfer_req')}}">Request to transfer an asset:</a> -->
 		<br>
 		{% endif %}
 
