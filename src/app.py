@@ -156,8 +156,8 @@ def create_user():
         cur.execute(SQL, (uname,))
         user_return = cur.fetchall()
 
-        #Make or update user:
-
+        ##Make or update user:
+        #Make new user:
         if user_return == None:
             #find roles
             SQL = "SELECT role_pk from roles WHERE role_name = %s"
@@ -170,7 +170,16 @@ def create_user():
             conn.commit() # Save the new entrey
 
             #Pass back feedback:
-            return "The user {} was successfully added to the database and activated as a {}".format(usn, rol)
+            return "The user {} was successfully added to the database and activated as a {}".format(uname, rol)
+
+        #Update user:
+        else: 
+            #The user was found and wants a new password
+            cur.execute('UPDATE user_accounts SET password=%s, active=%s WHERE username=%s;', (pwd, True, uname))
+            conn.commit() # Save
+            #Return message of change:
+            return "The {} user {} was updated in the database and activated".format(rol, uname)
+
 
 
 
