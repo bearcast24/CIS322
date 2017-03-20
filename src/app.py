@@ -102,7 +102,7 @@ def logout():
 
 
 
-@app.route('/create_user', methods=['GET', 'POST'])
+#@app.route('/create_user', methods=['GET', 'POST'])
 def create_user():
     if request.method == 'GET':
         return render_template('create_user.html')
@@ -141,6 +141,44 @@ def create_user():
             cur.execute("INSERT INTO user_accounts(username,password, role_fk) VALUES ('{}', '{}', '{}');".format(uname, pwd, rol_key))
             conn.commit()
             return render_template('user_added.html')
+
+
+@app.route('/activate_user', methods = ['POST'])
+    def activate_user():
+        #Connect to postgres:
+        conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+        cur = conn.cursor()
+
+        uname = request.form['username']        
+        pwd = request.form['password']
+        rol = request.form['role']
+        SQL = "SELECT username, password, role_fk, active FROM user_accounts WHERE username = %s"
+        cur.execute(SQL, (uname,))
+        user_return = cur.fetchall()
+
+        #Make or update user:
+
+        if user_return == None:
+            #find roles
+            SQL = "SELECT role_pk from roles WHERE role_name = %s"
+            cur.execute(SQL,(rol,))
+            role_key = cur.fetchone()[0]
+
+            #add to user db
+            SQL = "INSERT INTO user_accounts (username, password, role_fk, active) VALUES (%s, %s, %s, %s)"
+            cur.execute(SQL, (uname, pwd, role_key, True ))
+            conn.commit() # Save the new entrey
+
+            #Pass back feedback:
+            return "The user {} was successfully added to the database and activated as a {}".format(usn, rol)
+
+
+
+
+
+
+
+
 
 #New pages:
 
