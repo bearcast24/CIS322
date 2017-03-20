@@ -158,7 +158,7 @@ def activate_user():
 
     ##Make or update user:
     #Make new user:
-    if user_return == None:
+    if not user_return:
         #find roles
         SQL = "SELECT role_pk from roles WHERE role_name = %s"
         cur.execute(SQL,(rol,))
