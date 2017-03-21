@@ -233,7 +233,7 @@ def add_facility():
         common_name = request.form['common_name']
         code = request.form['fcode']
         #chedk for fac before adding:
-        cur.execute("SELECT fcode, common_name from facilities WHERE fcode = %s AND common_name = %s;",(code, common_name))
+        cur.execute("SELECT fcode, common_name from facilities WHERE code = %s AND common_name = %s;",(code, common_name))
         res_fac = cur.fetchall()
         #add new
         if not res_fac: 
@@ -432,7 +432,7 @@ def transfer_req():
         else:
             return render_template("generic_error.html")
 
-        cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES (%s, %s, %s, %s, %s);", (requester_fk, request_dt, source_fk, dest_fk, asset_fk))
+        cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES (%s, %s, %s, %s, %s);",  (requester_fk, request_dt, source_fk, dest_fk, asset_fk))
         conn.commit()
         return render_template("sucessful_request.html")
 
