@@ -30,7 +30,7 @@ CREATE TABLE assets (
 	asset_pk serial primary key,
 	asset_tag varchar(16), 
 	description text,
-	disposed timestamp DEFAULT null
+	disposed timestamp DEFAULT NULL
 );
 
 CREATE TABLE facilities (
