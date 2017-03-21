@@ -273,7 +273,7 @@ def add_asset():
     if request.method == 'GET':
         return render_template('add_asset.html')
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         asset_tag = request.form['asset_tag']
         desc = request.form['description']
         fac = request.form['common_name']
@@ -281,12 +281,12 @@ def add_asset():
 
         #DB check:
         cur.execute("SELECT asset_tag from assets WHERE asset_tag = %s;", (asset_tag,))
-        asset_there = cur.fetchone()[0]
+        asset_there = cur.fetchall()
 
         if not asset_there:
             cur.execute("INSERT INTO assets (asset_tag, description) VALUES (%s, %s) RETURNING asset_pk;", (asset_tag, desc))
-            conn.commit()
             asset_pk = cur.fetchone()[0]
+            conn.commit()
 
             #Find asset home:
             cur.execute("SELECT facility_pk FROM facilities WHERE common_name='{}';".format(fac))
