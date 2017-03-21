@@ -30,11 +30,11 @@ def login():
         result = cur.fetchone()
         #If user is found:
         if result is not None:
-            session['username'] = uname
-            session['logged_in'] = True
-            session['role'] = result[2]
-            #send to Dashboard after getting signed in
             if result[3]:
+                session['username'] = uname
+                session['logged_in'] = True
+                session['role'] = result[2]
+                #send to Dashboard after getting signed in
                 return redirect(url_for('dashboard'))
             else:
                 return render_template('access_denied.html')
