@@ -251,6 +251,8 @@ def add_asset():
     #Connect to postgres:
     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
     cur  = conn.cursor()
+    
+    #Make asset list for page:
     cur.execute("SELECT * FROM assets;")
     asset_ret = cur.fetchall()
     asset_results = []
@@ -262,6 +264,11 @@ def add_asset():
         data['description'] = line[2]
         asset_results.append(data)
     session['asset_list'] = asset_results
+    
+    #Make fac list for page
+    cur.execute("SELECT common_name from facilities;")
+    res = cur.fetchall()
+    session['active_fac'] = [row[0] for row in res]
 
     if request.method == 'GET':
         return render_template('add_asset.html')
