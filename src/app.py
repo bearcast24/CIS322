@@ -302,6 +302,7 @@ def dispose_asset():
         return redirect(url_for('login'))
 
     if session['role'] != 'Logistics Officer':
+        print(session['role'])
         return render_template('access_denied.html')
     #Connect to postgres:
     conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
