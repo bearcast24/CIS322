@@ -233,11 +233,11 @@ def add_facility():
         common_name = request.form['common_name']
         code = request.form['fcode']
         #chedk for fac before adding:
-        cur.execute("SELECT fcode, common_name from facilities WHERE fcode = '{}' AND common_name = '{}';".format(fcode, common_name))
+        cur.execute("SELECT fcode, common_name from facilities WHERE fcode = %s AND common_name = %s;",(code, common_name))
         res_fac = cur.fetchall()
         #add new
         if not res_fac: 
-            cur.execute("INSERT INTO facilities (common_name, fcode) VALUES ('{}','{}');".format(fcode, common_name))
+            cur.execute("INSERT INTO facilities (common_name, fcode) VALUES (%s, %s);", (code, common_name))
             conn.commit()
             return redirect(url_for('add_facility'))
         else: 
@@ -273,11 +273,11 @@ def add_asset():
         arrive_dt = request.form['date']
 
         #DB check:
-        cur.execute("SELECT asset_tag from assets WHERE asset_tag = '{}';".format(asset_tag))
+        cur.execute("SELECT asset_tag from assets WHERE asset_tag = %s;", (asset_tag,))
         asset_there = cur.fetchone()[0]
 
         if not asset_there:
-            cur.execute("INSERT INTO assets (asset_tag, description) VALUES ('{}', '{}') RETURNING asset_pk;".format(asset_tag, desc))
+            cur.execute("INSERT INTO assets (asset_tag, description) VALUES (%s, %s) RETURNING asset_pk;", (asset_tag, desc))
             conn.commit()
             asset_pk = cur.fetchone()[0]
 
@@ -286,7 +286,7 @@ def add_asset():
             facility_pk = cur.fetchone()[0]
 
             #Give asset the home it disserves:
-            cur.execute("INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt) VALUES ({}, {}, {});".format(asset_pk,facility_pk,arrive_dt))
+            cur.execute("INSERT INTO asset_at (asset_fk, facility_fk, arrive_dt) VALUES (%s, %s, %s);", (asset_pk, facility_pk, arrive_dt))
             conn.commit()
             return redirect(url_for('add_asset'))
         #Chance are it is a spelling or case issue:   
@@ -348,7 +348,7 @@ def asset_report():
     cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
         JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
         JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
-        WHERE arrive_dt = '{}';".format(time))
+        WHERE arrive_dt = %s;",(time, ))
 
     repo = cur.fetchall()
 
@@ -418,7 +418,7 @@ def transfer_req():
 
 
         cur.execute("SELECT f.fcode FROM assets AS a INNER JOIN asset_at AS aa ON a.asset_pk=aa.asset_fk INNER JOIN \
-            facilities AS f ON f.facility_pk=aa.facility_fk WHERE aa.arrive_dt<={} AND (aa.depart_dt>{} OR aa.depart_dt IS NULL) AND a.asset_tag=%s;".format(request_dt, request_dt))
+            facilities AS f ON f.facility_pk=aa.facility_fk WHERE aa.arrive_dt<= %s AND (aa.depart_dt> %s OR aa.depart_dt IS NULL) AND a.asset_tag=%s;", (request_dt, request_dt))
         repo = cur.fetchone()
         if not repo:
             if source != repo[0]:
@@ -432,7 +432,7 @@ def transfer_req():
         else:
             return render_template("generic_error.html")
 
-        cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES ({},{},{},{},{});".format(requester_fk, request_dt, source_fk, dest_fk, asset_fk))
+        cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES (%s, %s, %s, %s, %s);", (requester_fk, request_dt, source_fk, dest_fk, asset_fk))
         conn.commit()
         return render_template("sucessful_request.html")
 
