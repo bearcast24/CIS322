@@ -301,37 +301,31 @@ def dispose_asset():
     if not session['logged_in']:
         return redirect(url_for('login'))
 
-    if session['role'] != 'Logistics Officer':
+    if session['role'] == 'Logistics Officer':
         print(session['role'])
         return render_template('access_denied.html')
-    #Connect to postgres:
-    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
-    cur  = conn.cursor()
-    #Check if user is permited:
-    cur.execute("SELECT role_name from user_accounts \
-        JOIN roles ON user_accounts.role_fk = roles.role_pk WHERE username = '{}';".format(session['username']))
+        #Connect to postgres:
+        conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+        cur  = conn.cursor()
+        #Page fun:
+        if request.method == 'GET':
+            return render_template('dispose_asset.html')
+        #Req page:
+        if request.method == 'POST':
+            ass_tag = request.form['asset_tag']
+            cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE %s;",(ass_tag,))
+            ret_assets = cur.fetchall()
 
-    job_role = cur.fetchone()[0]
-    if job_role != 'logistics officer':
+            #item not there:
+            if not ret_assets:
+                return render_template('error_removed.html')
+            #Remove item: (Need to add in way to see item alreeady removed)
+            else: 
+                cur.execute("UPDATE assets SET disposed = TRUE where asset_tag = %s;",(ass_tag,))
+                conn.commit()
+                return render_template('dashboard.html')
+    else:
         return render_template('access_denied.html')
-
-    #Page fun:
-    if request.method == 'GET':
-        return render_template('dispose_asset.html')
-    #Req page:
-    if request.method == 'POST':
-        ass_tag = request.form['asset_tag']
-        cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE '{}';".format(ass_tag))
-        ret_assets = cur.fetchall()
-
-        #item not there:
-        if not ret_assets:
-            return render_template('error_removed.html')
-        #Remove item: (Need to add in way to see item alreeady removed)
-        else: 
-            cur.execute("UPDATE assets SET disposed = TRUE where asset_tag = '{}';".format(ass_tag))
-            conn.commit()
-            return render_template('dashboard.html')
 
 
 
