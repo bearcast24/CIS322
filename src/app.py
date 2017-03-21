@@ -24,7 +24,7 @@ def login():
         conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
         #queries:
-        cur.execute("SELECT username, password, role_name FROM user_accounts INNER JOIN roles ON role_pk = role_fk \
+        cur.execute("SELECT username, password, role_name, active FROM user_accounts INNER JOIN roles ON role_pk = role_fk \
             WHERE username = '{}' and password = '{}';".format(uname, pwd))
 
         result = cur.fetchone()
@@ -34,7 +34,10 @@ def login():
             session['logged_in'] = True
             session['role'] = result[2]
             #send to Dashboard after getting signed in
-            return redirect(url_for('dashboard'))
+            if result[3]:
+                return redirect(url_for('dashboard'))
+            else:
+                return render_template('access_denied.html')
         #If no user is found:
         return render_template('no_user.html')
 
