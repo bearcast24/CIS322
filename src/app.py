@@ -233,7 +233,7 @@ def add_facility():
         common_name = request.form['common_name']
         code = request.form['fcode']
         #chedk for fac before adding:
-        cur.execute("SELECT fcode, common_name from facilities WHERE code = %s AND common_name = %s;",(code, common_name))
+        cur.execute("SELECT fcode, common_name from facilities WHERE fcode = %s AND common_name = %s;",(code, common_name))
         res_fac = cur.fetchall()
         #add new
         if not res_fac: 
