@@ -30,13 +30,14 @@ def login():
         result = cur.fetchone()
         #If user is found:
         if result is not None:
+            session['username'] = uname
+            session['role'] = result[2]
             if result[3]:
-                session['username'] = uname
                 session['logged_in'] = True
-                session['role'] = result[2]
                 #send to Dashboard after getting signed in
                 return redirect(url_for('dashboard'))
             else:
+                session['logged_in'] = False
                 return render_template('access_denied.html')
         #If no user is found:
         return render_template('no_user.html')
@@ -194,17 +195,6 @@ def revoke_user():
     cur.execute('UPDATE user_accounts SET active=%s WHERE username=%s;', (False, uname))
     conn.commit() #Save the update, event if nothing exists
     return 'User {} has been updated'.format(uname)
-
-
-
-
-
-
-
-
-
-
-
 
 
 #New pages:
