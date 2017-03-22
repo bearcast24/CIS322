@@ -333,10 +333,18 @@ def asset_report():
     if not session['logged_in']:
         return redirect(url_for('login'))
 
+
+
+
     if request.method == 'GET':
         return render_template('asset_report.html')
 
     if request.method =='POST':
+        cur.execute("SELECT common_name from facilities;")
+        res = cur.fetchall()
+        session['active_fac'] = [row[0] for row in res]
+
+
         time = request.form['date']
         fac = request.format['common_name']
     cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
