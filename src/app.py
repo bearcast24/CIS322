@@ -384,31 +384,31 @@ def transfer_req():
         tag = request.form['asset_tag']
         source = request.form['source_fcode']
         dest = request.form['dest_fcode']
-        request_dt = str(datetime.now())
+        request_dt = str(datetime.datetime.now())
 
         #sql
-        cur.execute("SELECT asset_pk FROM assets WHERE asset_tag={};".format(tag))
+        cur.execute("SELECT asset_pk FROM assets WHERE asset_tag=%s;",(tag,))
         repo = cur.fetchone()
         if not repo:
             asset_fk = repo[0]
         return render_template('tag_missing.html')
 
 
-        cur.execute("SELECT facility_pk FROM facilities WHERE fcode={};".format(source))
+        cur.execute("SELECT facility_pk FROM facilities WHERE fcode= %s;",(source,))
         repo = cur.fetchone()
         if not repo:
             source_fk = repo[0]
         return render_template("bland_error.html")
 
 
-        cur.execute("SELECT facility_pk FROM facilities WHERE fcode={};".format(dest))
+        cur.execute("SELECT facility_pk FROM facilities WHERE fcode=%s;",(dest,))
         repo = cur.fetchone()
         if not repo:
             dest_fk = repo[0]
         return render_template("bland_error.html")
 
 
-        cur.execute("SELECT user_pk FROM users WHERE username={};".format(session["username"]))
+        cur.execute("SELECT user_pk FROM users WHERE username=%s;",(session["username"]),)
         repo = cur.fetchone()
         if not repo:
             requester_fk = repo[0]
@@ -438,27 +438,36 @@ def transfer_req():
 
 
     if request.method == 'GET':
-        asset_list = []
-        facility_list = []
+        # asset_list = []
+        # facility_list = []
 
-        cur.execute('SELECT asset_tag FROM assets;')
-        return_result = cur.fetchall()
+        # cur.execute('SELECT asset_tag FROM assets;')
+        # return_result = cur.fetchall()
         
-        for items in return_result:
-            row = dict()
-            row['tag'] = items[0]
-            asset_list.append(row)
-        session['asset_list'] = asset_list
+        # for items in return_result:
+        #     row = dict()
+        #     row['tag'] = items[0]
+        #     asset_list.append(row)
+        # session['asset_list'] = asset_list
 
-        cur.execute('SELECT fcode FROM facilities;')
-        return_result = cur.fetchall()
+        # cur.execute('SELECT fcode FROM facilities;')
+        # return_result = cur.fetchall()
     
-        for items in return_result:
-            row = dict()
-            row['fcode'] = items[0]
-            facility_list.append(row)
+        # for items in return_result:
+        #     row = dict()
+        #     row['fcode'] = items[0]
+        #     facility_list.append(row)
 
-        session['facility_list'] = facility_list
+        # session['facility_list'] = facility_list
+
+        #Fac:
+        cur.execute("SELECT common_name from facilities;")
+        res = cur.fetchall()
+        session['facility_list'] = [row[0] for row in res]
+        #Ass:
+        cur.execute("SELECT asset_tag from assets;")
+        return_result = cur.fetchall()
+        session['asset_list'] = [row[0] for row in res]
 
         return render_template('transfer_request.html')
 
