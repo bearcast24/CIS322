@@ -360,7 +360,7 @@ def asset_report():
             data['description'] = line[1]
             data['common_name'] = line[2]
             data['arrive_dt'] = line[3]
-            data['dept_dt'] = line[4]
+            data['disp_dt'] = line[4]
             asset_results.append(data)
         session['asset_repo'] = asset_results
 
