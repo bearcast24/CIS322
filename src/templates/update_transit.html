@@ -1,0 +1,17 @@
+
+<html>
+	<head><title>LOST Update Transit Screen</title></head>
+	<body>
+		<form action="{{url_for('update_transit')}}" method=POST>
+			<dl>
+				<dt>Please enter the load or unload date:</dt>
+				<dd><input type='date' name='date' value='1970-01-01'></dd>
+				<dd><input type='radio' name='which' value='load'> Set Load Time</dd>
+				<dd><input type='radio' name='which' value='unload'> Set Unload Time</dd>
+				<dd><input type='hidden' name='transfer_id' value="{{request.args.get('transfer_id')}}"></dd>
+				<dd><input type='submit' value='Continue'></dd>
+			</dl>
+		</form><br>
+		<a href="{{url_for('dashboard')}}">Back to dashboard</a>
+	</body>
+</html>
