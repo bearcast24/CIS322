@@ -333,13 +333,13 @@ def asset_report():
     if not session['logged_in']:
         return redirect(url_for('login'))
 
-
-
-
     if request.method == 'GET':
         return render_template('asset_report.html')
 
-    if request.method =='POST':
+    elif request.method =='POST':
+        conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+        cur  = conn.cursor()
+
         cur.execute("SELECT common_name from facilities;")
         res = cur.fetchall()
         session['active_fac'] = [row[0] for row in res]
@@ -347,25 +347,25 @@ def asset_report():
 
         time = request.form['date']
         fac = request.format['common_name']
-    cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
+        cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
         JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
         JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
         WHERE arrive_dt = %s;",(time, ))
 
-    repo = cur.fetchall()
+        repo = cur.fetchall()
 
-    asset_results = []
-    for line in repo:
-        data = dict()
-        #line[0] = key
-        data['asset_tag'] = line[0]
-        data['description'] = line[1]
-        data['common_name'] = line[2]
-        data['arrive_dt'] = line[3]
-        asset_results.append(data)
-    session['asset_list'] = asset_results
+        asset_results = []
+        for line in repo:
+            data = dict()
+            #line[0] = key
+            data['asset_tag'] = line[0]
+            data['description'] = line[1]
+            data['common_name'] = line[2]
+            data['arrive_dt'] = line[3]
+            asset_results.append(data)
+        session['asset_list'] = asset_results
 
-    return render_template('asset_report')
+        return render_template('asset_report')
 
 
 
