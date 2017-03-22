@@ -229,7 +229,7 @@ def add_facility():
         res_fac = cur.fetchall()
         #add new
         if not res_fac: 
-            cur.execute("INSERT INTO facilities (common_name, fcode) VALUES (%s, %s);", (code, common_name))
+            cur.execute("INSERT INTO facilities (common_name, fcode) VALUES (%s, %s);", (common_name,code))
             conn.commit()
             return redirect(url_for('add_facility'))
         else: 
