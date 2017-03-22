@@ -379,7 +379,7 @@ def transfer_req():
     conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
     cur = conn.cursor()
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
 
         tag = request.form['asset_tag']
         source = request.form['source_fcode']
