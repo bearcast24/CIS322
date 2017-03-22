@@ -424,7 +424,8 @@ def transfer_req():
 
 
         cur.execute("SELECT f.fcode FROM assets AS a INNER JOIN asset_at AS aa ON a.asset_pk=aa.asset_fk INNER JOIN \
-            facilities AS f ON f.facility_pk=aa.facility_fk WHERE aa.arrive_dt<= %s AND (aa.depart_dt> %s OR aa.depart_dt IS NULL) AND a.asset_tag=%s;", (request_dt, request_dt))
+            facilities AS f ON f.facility_pk=aa.facility_fk WHERE aa.arrive_dt<= %s AND \
+            (aa.depart_dt> %s OR aa.depart_dt IS NULL) AND a.asset_tag=%s;", (request_dt, request_dt))
         repo = cur.fetchone()
         if not repo:
             if source != repo[0]:
@@ -438,7 +439,7 @@ def transfer_req():
         else:
             return render_template("bland_error.html")
 
-        cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES (%s, %s, %s, %s, %s);",  (requester_fk, request_dt, source_fk, dest_fk, asset_fk))
+        cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES (%s, %s, %s, %s, %s);", (requester_fk, request_dt, source_fk, dest_fk, asset_fk))
         conn.commit()
         return render_template("sucessful_request.html")
 
@@ -490,16 +491,14 @@ def approve_req():
         cur.execute('SELECT a.asset_tag, f.facility_common_name, u.username, r.request_dt FROM transfer_requests AS r INNER JOIN \
             facilities AS f ON r.source_fk=f.facility_pk INNER JOIN users AS u ON r.requester_fk=u.user_pk INNER JOIN assets AS a ON \
             r.asset_fk=a.asset_pk WHERE r.request_pk=%s;', (req_id,))
-
+            #Office hour help^
         result = cur.fetchone()
 
         cur.execute('SELECT f.facility_common_name FROM transfer_requests AS r INNER JOIN \
             facilities AS f ON r.dest_fk=f.facility_pk WHERE r.request_pk=%s;', (req_id,))
 
         result_dest = cur.fetchone()
-        
 
-        #if request.method == 'GET' and 'asset' in request.args:
         if result == None or result_dest == None:
             conn.commit()
             return render_template('bland_error.html')
@@ -517,7 +516,7 @@ def approve_req():
 
 
 
-
+    #Office hour help
     elif request.method == 'POST':
         req_id = int(request.form['req_id'])
         approval = request.form['approval']
@@ -563,7 +562,8 @@ def update_transit():
         return render_template('update_transit.html', data = [data])
     
     if request.method == 'POST':
-        asset = request.form['asset'] #a primary key identifier
+        asset = request.form['asset']
+        #The asset ket from the form
         load = request.form['load_date']
         unload = request.form['unload_date']
         
