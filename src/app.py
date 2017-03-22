@@ -421,8 +421,6 @@ def transfer_req():
         return render_template("bland_error.html")
 
 
-
-
         cur.execute("SELECT f.fcode FROM assets AS a INNER JOIN asset_at AS aa ON a.asset_pk=aa.asset_fk INNER JOIN \
             facilities AS f ON f.facility_pk=aa.facility_fk WHERE aa.arrive_dt<= %s AND \
             (aa.depart_dt> %s OR aa.depart_dt IS NULL) AND a.asset_tag=%s;", (request_dt, request_dt))
@@ -469,11 +467,6 @@ def transfer_req():
 
         return render_template('transfer_request.html')
 
-
-
-
-
-
 @app.route('/approve_req', methods = ['GET', 'POST'])
 def approve_req():
     if not session['logged_in']:
@@ -514,8 +507,6 @@ def approve_req():
         conn.commit()
         return render_template('approve_req.html')
 
-
-
     #Office hour help
     elif request.method == 'POST':
         req_id = int(request.form['req_id'])
@@ -537,9 +528,7 @@ def approve_req():
             conn.close()
             return redirect(url_for('dashboard'))
 
-    return render_template('generic_error.html')
-
-
+    return render_template('bland_error.html')
 
 
 @app.route('/update_transit', methods=['GET', 'POST'])
@@ -566,7 +555,7 @@ def update_transit():
         #The asset ket from the form
         load = request.form['load_date']
         unload = request.form['unload_date']
-        
+        #using string formating to pass asset because this is a rare use case where is works:
         SQL = "UPDATE in_transit SET load_dt = %s, unload_dt = %s WHERE asset = '{}'".format(asset)
         data = (load, unload)
         cur.execute(SQL, data)
@@ -576,9 +565,6 @@ def update_transit():
         conn.commit()
         return redirect(url_for('dashboard'))
     
-
-
-
 
 # #EC??
 @app.route('/transfer_report', methods = ['GET', 'POST'])
