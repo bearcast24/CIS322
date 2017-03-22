@@ -9,10 +9,11 @@
 				{% for fac_name in session.active_fac%}
 				<option value='{{fac_name}}'> {{fac_name}} </option>
 				{%endfor%}
+				<option value='%' selected>All Fac.</option>
 			</select>
 			<br>
 			asset arrived: <br>
-			<input type="text" name="date" required><br>
+			<input type="date" name="date"  value="2017-01-01" required><br>
 			<input type="submit" name="submit" value="submit"/>
 		</form>
 
