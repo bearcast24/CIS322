@@ -573,11 +573,7 @@ def update_transit():
         SQL = "SELECT unload_dt from in_transit WHERE asset = '{}'".format(asset)
         cur.execute(SQL)
         res = cur.fetchall()
-        print(res)
-        if (not res) or (not res[0][0] is None): #if asset is unfound in transit table or the unload time is already set (not none)
-            return '<!DOCTYPE HTML> Invalid request - not in transit table or unload time is already set'
         else:   
-            print('in else loop')
             data = dict()
             data['asset'] = asset
             return render_template('update_transit.html', data = [data])
