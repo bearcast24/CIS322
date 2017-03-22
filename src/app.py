@@ -573,10 +573,11 @@ def update_transit():
         SQL = "SELECT unload_dt from in_transit WHERE asset = '{}'".format(asset)
         cur.execute(SQL)
         res = cur.fetchall()
-        else:   
-            data = dict()
-            data['asset'] = asset
-            return render_template('update_transit.html', data = [data])
+    else:   
+        data = dict()
+        data['asset'] = asset
+        return render_template('update_transit.html', data = [data])
+    
     if request.method == 'POST':
         asset = request.form['asset'] #a primary key identifier
         load = request.form['load_date']
