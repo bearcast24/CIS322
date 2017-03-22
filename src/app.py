@@ -332,21 +332,20 @@ def dispose_asset():
 def asset_report():
     if not session['logged_in']:
         return redirect(url_for('login'))
-
+    
+    conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+    cur  = conn.cursor()
+    cur.execute("SELECT common_name from facilities;")
+    res = cur.fetchall()
+    session['active_fac'] = [row[0] for row in res]
+   
     if request.method == 'GET':
         return render_template('asset_report.html')
 
     elif request.method =='POST':
-        conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
-        cur  = conn.cursor()
-
-        cur.execute("SELECT common_name from facilities;")
-        res = cur.fetchall()
-        session['active_fac'] = [row[0] for row in res]
-
-
         time = request.form['date']
-        fac = request.format['common_name']
+        fac = request.form['common_name']
+
         cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
             JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
             JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
