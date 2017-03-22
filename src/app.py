@@ -48,10 +48,8 @@ def login():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-    if not session['logged_in']:
+    if session['logged_in']:
         #test for logged in session and redirect
-        return redirect(url_for('login'))
-    else:
         conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
         tasks = []
@@ -91,8 +89,9 @@ def dashboard():
         conn.commit()
         # cur.close()
         # conn.close()
-    return render_template('dashboard.html');
-
+        return render_template('dashboard.html');
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/logout')
