@@ -348,10 +348,9 @@ def asset_report():
         time = request.form['date']
         fac = request.format['common_name']
         cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
-        JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
-        JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
-        WHERE arrive_dt = %s;",(time, ))
-
+            JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
+            JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
+            WHERE arrive_dt = %s;",(time, ))
         repo = cur.fetchall()
 
         asset_results = []
