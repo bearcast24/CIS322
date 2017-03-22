@@ -308,6 +308,8 @@ def dispose_asset():
             return render_template('dispose_asset.html')
         #Req page:
         if request.method == 'POST':
+            conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
+            cur  = conn.cursor()
             ass_tag = request.form['asset_tag']
             d_day = request.form['disposed_dt']
             cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE %s;",(ass_tag,))
