@@ -12,10 +12,13 @@
 		<br>
 		<a href="{{url_for('add_facility')}}">Add facility:</a> Add a facility to LOST.
 		<br>
+		<a href="{{url_for('transfer_report')}}">Transfer report:</a> Listing of assets in transit
+		<br>
 		
 		{% if session.role == 'Logistics Officer' %}
 		<a href="{{url_for('dispose_asset')}}">Dispose an asset:</a> 
 		<br>
+		<a href="{{url_for('transfer_req')}}">Request to transfer an asset:</a>
 		<br>
 		{% endif %}
 

@@ -301,17 +301,15 @@ def dispose_asset():
         return redirect(url_for('login'))
 
     if session['role'] == 'Logistics Officer':
-        print(session['role'])
-        return render_template('access_denied.html')
+        #print(session['role'])
         #Connect to postgres:
-        conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
-        cur  = conn.cursor()
         #Page fun:
         if request.method == 'GET':
             return render_template('dispose_asset.html')
         #Req page:
         if request.method == 'POST':
             ass_tag = request.form['asset_tag']
+            d_day = request.form['disposed_dt']
             cur.execute("SELECT asset_tag, disposed from assets WHERE asset_tag LIKE %s;",(ass_tag,))
             ret_assets = cur.fetchall()
 
@@ -320,7 +318,7 @@ def dispose_asset():
                 return render_template('error_removed.html')
             #Remove item: (Need to add in way to see item alreeady removed)
             else: 
-                cur.execute("UPDATE assets SET disposed = TRUE where asset_tag = %s;",(ass_tag,))
+                cur.execute("UPDATE assets SET disposed = %s where asset_tag = %s;",(d_day, ass_tag))
                 conn.commit()
                 return render_template('dashboard.html')
     else:
