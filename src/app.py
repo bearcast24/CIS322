@@ -346,7 +346,7 @@ def asset_report():
         time = request.form['date']
         fac = request.form['common_name']
 
-        cur.execute("SELECT asset_tag, description, common_name, arrive_dt FROM assets \
+        cur.execute("SELECT asset_tag, description, common_name, arrive_dt, disposed FROM assets \
             JOIN asset_at ON assets.asset_pk = asset_at.asset_fk \
             JOIN facilities ON asset_at.facility_fk = facilities.facility_pk \
             WHERE common_name LIKE %s AND arrive_dt = %s;",(fac, time))
@@ -360,6 +360,7 @@ def asset_report():
             data['description'] = line[1]
             data['common_name'] = line[2]
             data['arrive_dt'] = line[3]
+            data['dept_dt'] = line[4]
             asset_results.append(data)
         session['asset_repo'] = asset_results
 
