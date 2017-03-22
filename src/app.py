@@ -361,7 +361,7 @@ def asset_report():
             data['common_name'] = line[2]
             data['arrive_dt'] = line[3]
             asset_results.append(data)
-        session['asset_list'] = asset_results
+        session['asset_repo'] = asset_results
 
         return redirect(url_for('asset_report'))
 

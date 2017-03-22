@@ -17,7 +17,7 @@
 			<input type="submit" name="submit" value="submit"/>
 		</form>
 
-		<!-- <h2>Assets in database:</h2>
+		<h2>Assets in database:</h2>
 		<table>
 			<tr>
 				<th> asset_tag </th>
@@ -26,8 +26,8 @@
 				<th> Arrive date </th>
 
 			</tr>
- -->
-			{%for item in session.asset_list%}
+
+			{%for item in session.asset_repo%}
 			<tr>
 				<td> {{item.asset_tag}} </td>
 				<td> {{item.description}} </td>
