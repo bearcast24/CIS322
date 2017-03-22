@@ -364,7 +364,7 @@ def asset_report():
             asset_results.append(data)
         session['asset_list'] = asset_results
 
-        return render_template('asset_report')
+        return redirect(url_for('asset_report'))
 
 
 
