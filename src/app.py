@@ -367,20 +367,19 @@ def asset_report():
         return redirect(url_for('asset_report'))
 
 
-
-
 #8
 @app.route('/transfer_req', methods = ['GET', 'POST'])
 def transfer_req():
     if not session['logged_in']:
         return redirect(url_for('login'))
+
     if session['role'] != 'Logistics Officer':
         return render_template('access_denied.html')
 
     conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
     cur = conn.cursor()
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
 
         tag = request.form['asset_tag']
         source = request.form['source_fcode']
@@ -499,17 +498,17 @@ def update_transit():
 # #EC??
 @app.route('/transfer_report', methods = ['GET', 'POST'])
 def transfer_report():
-#     if not session['logged_in']:
-#         return redirect(url_for('login'))
+    # if not session['logged_in']:
+    #     return redirect(url_for('login'))
 
-#     conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
-#     cur = conn.cursor()
+    # conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    # cur = conn.cursor()
 
-#     session['transfer_report'] = []
+    # session['transfer_report'] = []
 
     
 
-#     session['transfer_report'] = transfer_report
+    # session['transfer_report'] = transfer_report
 
     return render_template('transfer_report.html')
 
