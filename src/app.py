@@ -9,6 +9,8 @@ from config import dbname, dbhost, dbport
 app = Flask(__name__)
 
 app.secret_key = 'secret_password'
+#Set session default to False:
+session['logged_in'] = False
 
 #Enter and Exit LOST
 @app.route('/')
