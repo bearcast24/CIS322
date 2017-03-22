@@ -1,0 +1,30 @@
+<html>
+	<title>Approve Transfer Request</title>
+	<body>
+		<table>
+			<tr>
+				<th>Asset_Tag</th>
+				<th>Source_Fac</th>
+				<th>Destination_Fac</th>
+				<th>Requester</th>
+				<th>Request_Time</th>
+			</tr>
+			{% for entry in session.app_request %}
+			<tr>
+				<td>{{entry.tag}}</td>
+				<td>{{entry.source}}</td>
+				<td>{{entry.dest}}</td>
+				<td>{{entry.requester}}</td>
+				<td>{{entry.request_dt}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<br>
+		<form action="{{url_for('approve_req')}}" method=POST>
+			<button name="approval" type="submit" value="APPROVED">APPROVE</button>
+			<button name="approval" type="submit" value="REJECTED">REJECT</button>
+		</form>
+		<br>
+		Return to <a href="{{url_for('dashboard')}}">Dashboard</a> 
+	</body>
+</html>

@@ -52,26 +52,14 @@ def dashboard():
         #test for logged in session and redirect
         conn = psycopg2.connect(dbname=dbname,host=dbhost,port=dbport)
         cur  = conn.cursor()
-        tasks = []
         #Hard code for ease-> should use database to make avail forms
 
-        #Facilities
-        if session['role'] == "Facilities Officer":
-            #listing of transfer requests needing approval.
-            cur.execute("SELECT request_pk, user_accounts.username, transfer_requests.request_dt FROM transfer_requests INNER JOIN \
-                    user_accounts ON transfer_requests.requester_fk = user_accounts.user_pk WHERE approval_dt IS NULL;") 
-                    #https://www.w3schools.com/sql/sql_join_inner.asp
-            todo_request = cur.fetchall()
+        
 
-            for item in todo_request:
-                item_que = dict()
-                item_que["request_pk"] =item[0]
-                item_que["requester"] =item[1]
-                item_que["request_time"] =item[2]
-                tasks.append(item_que)
-            session['tasks'] = tasks
+
         #Logistics
-        elif session['role'] == "Logistics Officer":
+        if session['role'] == "Logistics Officer":
+            tasks = []
             #listing of asset transits which need to have load or unload times set
             cur.execute("SELECT request_fk, load_dt, unload_dt FROM in_transit WHERE load_dt IS NULL OR unload_dt IS NULL;")
             todo_request = cur.fetchall()
@@ -85,10 +73,44 @@ def dashboard():
             #Send to Flask
             session['tasks'] = tasks
 
+
+        #Facilities
+        elif session['role'] == "Facilities Officer":
+            tasks = []
+            #listing of transfer requests needing approval.
+            cur.execute("SELECT request_pk, user_accounts.username, transfer_requests.request_dt FROM transfer_requests INNER JOIN \
+                    user_accounts ON transfer_requests.requester_fk = user_accounts.user_pk WHERE approval_dt IS NULL;") 
+                    #https://www.w3schools.com/sql/sql_join_inner.asp
+            todo_request = cur.fetchall()
+
+            for item in todo_request:
+                item_que = dict()
+                item_que["request_pk"] =item[0]
+                item_que["requester"] =item[1]
+                item_que["request_time"] =item[2]
+                tasks.append(item_que)
+            session['tasks'] = tasks
+        
+
+
+
+
+
+            SQL = "SELECT * FROM requests WHERE approval_dt IS NULL"
+            cur.execute(SQL)
+            res = cur.fetchall()
+            keys = ('request_pk', 'requestor', 'request_dt', 'src_fac', 'dest_fac', 'asset', 'approver', 'approval_date')
+            unapproved = [dict(zip(keys, r)) for r in res]
+            return unapproved
+
+
+
+
+
+
+
         #Save asset changes
         conn.commit()
-        # cur.close()
-        # conn.close()
         return render_template('dashboard.html');
     else:
         return redirect(url_for('login'))
@@ -430,7 +452,7 @@ def transfer_req():
                 conn.commit()
                 return render_template("bland_error.html")
         else:
-            return render_template("generic_error.html")
+            return render_template("bland_error.html")
 
         cur.execute("INSERT INTO transfer_requests (requester_fk, request_dt, source_fk, dest_fk, asset_fk) VALUES (%s, %s, %s, %s, %s);",  (requester_fk, request_dt, source_fk, dest_fk, asset_fk))
         conn.commit()
@@ -474,11 +496,65 @@ def approve_req():
 
     if session['role'] != 'Facilities Officer':
         return render_template('access_denied.html')
-    
+    conn = psycopg2.connect(dbname=dbname, host=dbhost, port=dbport)
+    cur = conn.cursor()
+
+    if request.method == 'GET' and 'req_id' in request.args:
+        req_id = int(request.args['req_id'])
+        
+        #SQL
+        cur.execute('SELECT a.asset_tag, f.facility_common_name, u.username, r.request_dt FROM transfer_requests AS r INNER JOIN \
+            facilities AS f ON r.source_fk=f.facility_pk INNER JOIN users AS u ON r.requester_fk=u.user_pk INNER JOIN assets AS a ON \
+            r.asset_fk=a.asset_pk WHERE r.request_pk=%s;', (req_id,))
+
+        result = cur.fetchone()
+
+        cur.execute('SELECT f.facility_common_name FROM transfer_requests AS r INNER JOIN \
+            facilities AS f ON r.dest_fk=f.facility_pk WHERE r.request_pk=%s;', (req_id,))
+
+        result_dest = cur.fetchone()
+        
+
+        #if request.method == 'GET' and 'asset' in request.args:
+        if result == None or result_dest == None:
+            conn.commit()
+            return render_template('bland_error.html')
+        else:
+            session['request_report'] = []
+            row = dict()
+            row['tag'] = result[0]
+            row['source'] = result[1]
+            row['dest'] = result_dest[0]
+            row['requester'] = result[2]
+            row['request_dt'] = result[3]
+            session['request_report'].append(row)
+        conn.commit()
+        return render_template('approve_req.html')
 
 
 
 
+    elif request.method == 'POST':
+        req_id = int(request.form['req_id'])
+        approval = request.form['approval']
+        if approval == 'False':
+            cur.execute('DELETE FROM transfer_requests WHERE request_pk=%s;', (req_id,))
+            conn.commit()
+            cur.close()
+            conn.close()
+            return redirect(url_for('dashboard'))
+
+        else:
+            user = session['username']
+            approval_dt = str(datetime.now())
+            cur.execute('UPDATE transfer_requests SET approval_dt=%s, approver_fk=(SELECT user_pk FROM users WHERE username=%s) WHERE request_pk=%s;', (approval_dt, user, req_id))
+            cur.execute('INSERT INTO transfers (asset_fk, request_fk) VALUES ((SELECT asset_fk FROM transfer_requests WHERE request_pk=%s), %s);', (req_id, req_id))
+            conn.commit()
+            cur.close()
+            conn.close()
+            return redirect(url_for('dashboard'))
+
+    return render_template('generic_error.html')
 
 
 

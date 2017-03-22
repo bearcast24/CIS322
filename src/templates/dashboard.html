@@ -4,7 +4,7 @@
 		<h1>Dashboard</h1>
 	<!--<p>Connected to {{dbhost}} at port {{dbport}} for database {{dbname}}</p>-->
 
-		<h2>Welcome {{session.username}} you are a {{session.role}}</h2>
+		<h1>Welcome {{session.username}} you are a {{session.role}}</h1>
 
 		<a href="{{url_for('asset_report')}}">Asset report:</a> See a list of assets LOST by facility. 
 		<br>
@@ -25,32 +25,67 @@
 
 
 
-		<h2>Things needing approval from you:</h2>
-			<table border = "1">
 
+
+
+		{% if session.role == "Logistics Officer" %}
+			<table>
 				<tr>
-					{% if session.role == "Facilities Officer" %}
-					<th>Transit Request ID</th> <th>Requester</th> <th>Request Time</th>
-					{% else %}
-					<th>Request ID</th> <th>Load time</th> <th>Unload Time</th>
-					{% endif %}
+					<th> Asset </th>
+					<th> Source </th>
+					<th> Dest. </th>
+					<th> Load date </th>
+					<th> Unload Date </th>
+					<th> VALIDATION </th>
 				</tr>
-
-				{% for item in session.tasks %}
+				{% for row in session.tasks %}
 				<tr>
-					<td> {{item.val1}} </td>
-					<td> {{item.val2}} </td>
-					<td> {{item.val3}} </td>
-					<td> {% if session.role == 'Facilities Officer' %}
-						(Add button to validate)
-						{% else %}
-						(Add button to Update)
-						{% endif %} 
-					</td>
+					<td> {{row.asset}} </td>
+					<td> {{row.src_fac}} </td>
+					<td> {{row.dest_fac}} </td>
+					<td> {{row.load_dt}} </td>
+					<td> {{row.unload_dt}} </td>
 
+					<td> <form action="{{url_for('update_transit')}}" method="GET">
+							<button name='trans_id' type="submit" value="{{row.trans_id}}">Update</button>
+						</form> </td>
 				</tr>
-				{% endfor %}
 			</table>
+		{% endif %}
+
+
+
+			
+
+
+
+
+		{% if session.role == "Facilities Officer" %}
+		<table>
+			<tr>
+				<th> Asset_tag </th>
+				<th> Source </th>
+				<th> Load_date </th>
+				<th> Dest. </th>
+				<th> Unload_date </th>
+				<th>  </th>
+				<th> UPDATE </th>
+			</tr>
+			{% for row in session.tasks %}
+			<tr>
+				<td> {{row.val1}} </td>
+				<td> {{row.val2}} </td>
+				<td> {{row.val3}} </td>
+				<td> {{row.val4}} </td>
+				<td> {{row.val5}} </td>
+				<td> {{row.val6}} </td>
+
+				<td> <form action="{{url_for('approve_req')}}" method="GET">
+						<button name='approve_id' type="submit" value="{{row.approve_id}}">Validate</button>
+					</form></td>
+				</tr>
+			</table>
+		{% endif %}
 
 
 
