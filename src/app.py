@@ -566,6 +566,34 @@ def update_transit():
 
     if session['role'] != 'Logistics Officer':
         return render_template('access_denied.html')
+
+
+    if request.method == 'GET' and 'asset' in request.args:
+        asset = int(request.args['asset'])
+        SQL = "SELECT unload_dt from in_transit WHERE asset = '{}'".format(asset)
+        cur.execute(SQL)
+        res = cur.fetchall()
+        print(res)
+        if (not res) or (not res[0][0] is None): #if asset is unfound in transit table or the unload time is already set (not none)
+            return '<!DOCTYPE HTML> Invalid request - not in transit table or unload time is already set'
+        else:   
+            print('in else loop')
+            data = dict()
+            data['asset'] = asset
+            return render_template('update_transit.html', data = [data])
+    if request.method == 'POST':
+        asset = request.form['asset'] #a primary key identifier
+        load = request.form['load_date']
+        unload = request.form['unload_date']
+        
+        SQL = "UPDATE in_transit SET load_dt = %s, unload_dt = %s WHERE asset = '{}'".format(asset)
+        data = (load, unload)
+        cur.execute(SQL, data)
+        SQL = "UPDATE asset_at SET arrive_dt = %s, depart_dt = %s WHERE asset_fk = '{}'".format(asset)
+        data = (unload, load)
+        cur.execute(SQL, data)
+        conn.commit()
+        return redirect(url_for('dashboard'))
     
 
 
