@@ -93,22 +93,6 @@ def dashboard():
         
 
 
-
-
-
-            SQL = "SELECT * FROM requests WHERE approval_dt IS NULL"
-            cur.execute(SQL)
-            res = cur.fetchall()
-            keys = ('request_pk', 'requestor', 'request_dt', 'src_fac', 'dest_fac', 'asset', 'approver', 'approval_date')
-            unapproved = [dict(zip(keys, r)) for r in res]
-            return unapproved
-
-
-
-
-
-
-
         #Save asset changes
         conn.commit()
         return render_template('dashboard.html');
